@@ -21,7 +21,7 @@ void RedisDB_UT::testRun()
 {
     RedisDB rdb;
     rdb.Run();
-
+    QVERIFY2(true, "Failure");
 }
 
 QTEST_APPLESS_MAIN(RedisDB_UT);
