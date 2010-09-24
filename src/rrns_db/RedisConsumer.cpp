@@ -1,5 +1,7 @@
 #include "RedisConsumer.h"
 
+using namespace rrns_db;
+
 struct RedisConnection {
 
     RedisConnection(const char *h, const int p, const int t)

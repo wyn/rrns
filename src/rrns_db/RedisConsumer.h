@@ -4,44 +4,49 @@
 #include <QtCore>
 #include "credis.h"
 
-class RedisConsumer {
+namespace rrns_db {
 
-public:
+    class RedisConsumer {
 
-    RedisConsumer();
-    RedisConsumer(const QString &hostname, int port, int timeout);
-    virtual ~RedisConsumer();
+    public:
 
-    //Register/unregister with a RN data stream
-    bool Register(const QString &major, const QString &minor);
-    bool Unregister();
+        RedisConsumer();
+        RedisConsumer(const QString &hostname, int port, int timeout);
+        virtual ~RedisConsumer();
 
-    //readonly class state
-    QString MajorType() const {return majorType;}
-    QString MinorType() const {return minorType;}
-    int Seed() const {return seed;}
-    int Id() const {return id;}
+        //Register/unregister with a RN data stream
+        bool Register(const QString &major, const QString &minor);
+        bool Unregister();
 
-    //consuming data
-    bool CanConsume() const;
-    bool ValidHandle() const;
+        //readonly class state
+        QString MajorType() const {return majorType;}
+        QString MinorType() const {return minorType;}
+        int Seed() const {return seed;}
+        int Id() const {return id;}
 
-private:
+        //consuming data
+        bool CanConsume() const;
+        bool ValidHandle() const;
 
-    //Redis stuff
-    REDIS dbHandle;
+    private:
 
-    //useful state for random number server
-    QString majorType;
-    QString minorType;
-    int seed;
-    int id;
+        //Redis stuff
+        REDIS dbHandle;
 
-private:
-    RedisConsumer(const RedisConsumer&) {}
-    RedisConsumer& operator=(const RedisConsumer&) {}
+        //useful state for random number server
+        QString majorType;
+        QString minorType;
+        int seed;
+        int id;
+
+    private:
+        //don't want these
+        RedisConsumer(const RedisConsumer&);
+        RedisConsumer& operator=(const RedisConsumer&);
 
 
-};
+    };
+
+} //namespace rrns_db
 
 #endif // RedisConsumer_H

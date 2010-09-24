@@ -33,18 +33,20 @@ INCLUDEPATH += . \
     src \
     src/rrns_db \
     src/third_party/credis \
-    src/third_party/gtest/include
+    src/third_party/gmock/gtest/include \
+    src/third_party/gmock/gtest \
+    src/third_party/gmock/include \
+    src/third_party/gmock
 
 #headers that are reasonably stable
 DEPENDPATH += . \
     src \
     src/third_party \
-    src/third_party/credis \
-    src/third_party/gtest
-
+    src/third_party/credis
 
 #actual header/source files to build
-#TODO should build credis to a static lib
+#TODO should build credis to a static lib?
+#TODO should build gmock to a static lib?
 HEADERS += \
     src/rrns_db/RedisConsumer.h \
     src/rrns_db/RedisDB_global.h \
@@ -59,8 +61,11 @@ SOURCES += \
 test{
     SOURCES += \
         src/rrns_db/ut/RedisConsumer_UT.cpp \
-        src/rrns_db/ut/Main_UT.cpp
+        src/rrns_db/ut/Main_UT.cpp \
+        src/third_party/gmock/gtest/src/gtest-all.cc \
+        src/third_party/gmock/src/gmock-all.cc
 }
+
 #Google test framework
-LIBS += -L$$_PRO_FILE_PWD_/src/third_party/gtest/lib
-LIBS += -lgtest
+#LIBS += -L$$_PRO_FILE_PWD_/src/third_party/gtest/lib
+#LIBS += -lgmock
