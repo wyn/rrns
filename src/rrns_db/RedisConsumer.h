@@ -47,6 +47,6 @@ namespace rrns_db {
 
     };
 
-} //namespace rrns_db
+} //rrns_db
 
 #endif // RedisConsumer_H

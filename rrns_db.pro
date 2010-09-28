@@ -32,40 +32,53 @@ DEFINES += RRNS_DB_LIBRARY
 INCLUDEPATH += . \
     src \
     src/rrns_db \
+    src/third_party \
     src/third_party/credis \
-    src/third_party/gmock/gtest/include \
-    src/third_party/gmock/gtest \
-    src/third_party/gmock/include \
-    src/third_party/gmock
+    src/third_party/gmock \
 
 #headers that are reasonably stable
 DEPENDPATH += . \
     src \
     src/third_party \
-    src/third_party/credis
+    /usr/local/include
 
 #actual header/source files to build
 #TODO should build credis to a static lib?
 #TODO should build gmock to a static lib?
 HEADERS += \
+    src/rrns_db/ICredisConsumer.h \
+    src/rrns_db/RedisManager.h \
     src/rrns_db/RedisConsumer.h \
     src/rrns_db/RedisDB_global.h \
     src/rrns_db/RedisDB_Wrapper.h \
-    src/third_party/credis/credis.h
+    \
+    src/third_party/credis/credis.h \
 
 SOURCES += \
+    src/rrns_db/RedisManager.cpp \
     src/rrns_db/RedisConsumer.cpp \
     src/rrns_db/RedisDB_Wrapper.cpp \
+    \
     src/third_party/credis/credis.c
 
 test{
+
+    HEADERS += \
+        src/rrns_db/ut/MockICredisConsumer.h \
+        \
+        src/third_party/gmock/gmock/gmock.h \
+        src/third_party/gmock/gtest/gtest.h
+
+
     SOURCES += \
         src/rrns_db/ut/RedisConsumer_UT.cpp \
+        src/rrns_db/ut/RedisManager_UT.cpp \
         src/rrns_db/ut/Main_UT.cpp \
-        src/third_party/gmock/gtest/src/gtest-all.cc \
-        src/third_party/gmock/src/gmock-all.cc
+        \
+        src/third_party/gmock/gmock-gtest-all.cc
 }
 
-#Google test framework
-#LIBS += -L$$_PRO_FILE_PWD_/src/third_party/gtest/lib
-#LIBS += -lgmock
+#Google logging framework
+#LIBS += -L$$_PRO_FILE_PWD_/src/third_party/gmock/make
+LIBS += -L/usr/local/lib
+LIBS += -lglog
