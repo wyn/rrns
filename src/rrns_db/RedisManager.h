@@ -1,47 +1,48 @@
 #ifndef REDISMANAGER_H
 #define REDISMANAGER_H
 
-#include <string>
-#include "credis.h"
+#include "IRedisManager.h"
 
 namespace rrns_db {
 
     //forwards
     class ICredisConsumer;
+    class ICredisConnector;
 
-    class RedisManager
+    class RedisManager : public IRedisManager
     {
 
     public:
-        RedisManager(ICredisConsumer *consumer);
+
+        //construct/destruct
+        RedisManager(ICredisConsumer *consumer, ICredisConnector *connector);
+        virtual ~RedisManager();
 
         //Connect/disconnect with db
-        void Connect(const std::string &host, int port, int timeout);
-        void Disconnect();
+        virtual void Connect(const std::string &host, int port, int timeout);
+        virtual void Disconnect();
 
         //Register/unregister with a RN data stream
-        void Register(const std::string &major, const std::string &minor);
-        void Unregister();
+        virtual void Register(const std::string &major, const std::string &minor);
+        virtual void Unregister();
 
         //readonly class state
-        std::string MajorType() const {return majorType;}
-        std::string MinorType() const {return minorType;}
-        int Id() const {return id;}
+        virtual std::string MajorType() const;
+        virtual std::string MinorType() const;
 
         //consuming data
-        bool CanConsume() const;
-        bool ValidHandle() const;
+        virtual bool CanConsume() const;
+        virtual bool ValidHandle() const;
+        virtual std::list<double> GetRandoms(int howMany) const;
+
+    protected:
+        virtual void Reset();
 
     private:
 
         //Redis stuff
-        REDIS dbHandle;
         ICredisConsumer *cons;
-
-        //useful state for random number server
-        std::string majorType;
-        std::string minorType;
-        int id;
+        ICredisConnector *conn;
 
     private:
         //don't want these

@@ -1,4 +1,5 @@
 #include "MockICredisConsumer.h"
+#include "MockICredisConnector.h"
 #include "RedisManager.h"
 
 #include "gmock/gmock.h"
@@ -9,8 +10,10 @@ using ::testing::AtMost;
 using ::testing::AtLeast;
 using ::testing::Return;
 using ::testing::Gt;
+using ::testing::InSequence;
 
-using ::rrns_db::MockICredisConsumer;
+using ::rrns_db::test::MockICredisConsumer;
+using ::rrns_db::test::MockICredisConnector;
 using ::rrns_db::RedisManager;
 
 namespace {
@@ -62,85 +65,171 @@ class RedisManagerTest : public ::testing::Test {
 
 TEST_F(RedisManagerTest, CanConstruct) {
 
-    MockICredisConsumer mock;
+    MockICredisConsumer cons;
+    MockICredisConnector conn;
 
-    EXPECT_CALL(mock, Init())
+    EXPECT_CALL(cons, Reset())
             .Times(1);
 
-    EXPECT_CALL(mock, GetHandle(_,_,_))
-            .Times(0);
-
-    RedisManager rm(&mock);
+    RedisManager rm(&cons, &conn);
 
 }
 
 TEST_F(RedisManagerTest, CanConnect) {
 
-    MockICredisConsumer mock;
+    MockICredisConsumer cons;
+    MockICredisConnector conn;
 
-    //make sure the db handle is not null
-    REDIS r;
-    ON_CALL(mock, GetHandle(host, port, timeout))
-            .WillByDefault(Return(r));
+    ON_CALL(conn, IsValidHandle())
+            .WillByDefault(Return(true));
 
-    EXPECT_CALL(mock, GetHandle(host, port, timeout))
+    InSequence s;
+
+    EXPECT_CALL(conn, Connect(host, port, timeout))
             .Times(1);
 
-    RedisManager rm(&mock);
+    EXPECT_CALL(cons, RegisterConnection(&conn))
+            .Times(1);
+
+    RedisManager rm(&cons, &conn);
     rm.Connect(host, port, timeout);
 
 }
 
 TEST_F(RedisManagerTest, CanDisconnect) {
 
-    MockICredisConsumer mock;
+    MockICredisConsumer cons;
+    MockICredisConnector conn;
 
-    EXPECT_CALL(mock, Close(_))
+    EXPECT_CALL(cons, Reset())
+            .Times(AtLeast(1));
+
+    EXPECT_CALL(conn, Disconnect())
             .Times(1);
 
-    RedisManager rm(&mock);
+    RedisManager rm(&cons, &conn);
     rm.Disconnect();
 }
 
 TEST_F(RedisManagerTest, CanRegister) {
 
-    MockICredisConsumer mock;
+    MockICredisConsumer cons;
+    MockICredisConnector conn;
 
-    ON_CALL(mock, IsValidHandle(_))
+    ON_CALL(conn, IsValidHandle())
             .WillByDefault(Return(true));
 
-    ON_CALL(mock, StreamExists(_, major, minor))
+    ON_CALL(cons, StreamExists(major, minor))
             .WillByDefault(Return(true));
 
-    ON_CALL(mock, GetStreamId(_, major, minor))
-            .WillByDefault(Return(1));
+    ON_CALL(cons, CanConsume())
+            .WillByDefault(Return(true));
 
-    EXPECT_CALL(mock, IsValidHandle(_))
-      .Times(AtLeast(1));
+    InSequence s;
 
-    EXPECT_CALL(mock, StreamExists(_, major, minor))
-      .Times(AtLeast(1));
+    EXPECT_CALL(cons, StreamExists(major, minor))
+      .Times(1);
 
-    EXPECT_CALL(mock, GetStreamId(_, major, minor))
-      .Times(AtLeast(1));
+    EXPECT_CALL(cons, RegisterStream(major, minor))
+      .Times(1);
 
-    RedisManager rm(&mock);
+    RedisManager rm(&cons, &conn);
     rm.Register(major, minor);
-    ASSERT_EQ(major, rm.MajorType());
-    ASSERT_EQ(minor, rm.MinorType());
-    ASSERT_LT(0, rm.Id());
 
 }
 
 TEST_F(RedisManagerTest, CanUnregister) {
 
-    MockICredisConsumer mock;
+    MockICredisConsumer cons;
+    MockICredisConnector conn;
 
-    EXPECT_CALL(mock, Init())
-      .Times(1);
+    EXPECT_CALL(cons, Reset())
+            .Times(AtLeast(1));
 
-    RedisManager rm(&mock);
-    rm.Disconnect();
+    //dont disconnect though
+    EXPECT_CALL(conn, Disconnect())
+            .Times(0);
+
+    RedisManager rm(&cons, &conn);
+    rm.Unregister();
+
+}
+
+TEST_F(RedisManagerTest, TestMajorType) {
+
+    MockICredisConsumer cons;
+    MockICredisConnector conn;
+
+    EXPECT_CALL(cons, MajorType())
+            .Times(1);
+
+    RedisManager rm(&cons, &conn);
+    rm.MajorType();
+
+}
+
+TEST_F(RedisManagerTest, TestMinorType) {
+
+    MockICredisConsumer cons;
+    MockICredisConnector conn;
+
+    EXPECT_CALL(cons, MinorType())
+            .Times(1);
+
+    RedisManager rm(&cons, &conn);
+    rm.MinorType();
+
+}
+
+TEST_F(RedisManagerTest, TestCanConsume) {
+
+    MockICredisConsumer cons;
+    MockICredisConnector conn;
+
+    EXPECT_CALL(cons, CanConsume())
+            .Times(1);
+
+    RedisManager rm(&cons, &conn);
+    rm.CanConsume();
+
+}
+
+TEST_F(RedisManagerTest, TestValidHandle) {
+
+    MockICredisConsumer cons;
+    MockICredisConnector conn;
+
+    EXPECT_CALL(conn, IsValidHandle())
+            .Times(1);
+
+    RedisManager rm(&cons, &conn);
+    rm.ValidHandle();
+
+}
+
+TEST_F(RedisManagerTest, TestGetRandoms) {
+
+    MockICredisConsumer cons;
+    MockICredisConnector conn;
+
+    std::list<double> rs;
+
+    ON_CALL(cons, GetRandoms(_))
+            .WillByDefault(Return(rs));
+
+    ON_CALL(cons, CanConsume())
+            .WillByDefault(Return(true));
+
+    InSequence s;
+
+    EXPECT_CALL(cons, CanConsume())
+            .Times(1);
+
+    EXPECT_CALL(cons, GetRandoms(_))
+            .Times(1);
+
+    RedisManager rm(&cons, &conn);
+    rm.GetRandoms(10);
 
 }
 

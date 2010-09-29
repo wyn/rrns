@@ -47,6 +47,8 @@ DEPENDPATH += . \
 #TODO should build gmock to a static lib?
 HEADERS += \
     src/rrns_db/ICredisConsumer.h \
+    src/rrns_db/ICredisConnector.h \
+    src/rrns_db/IRedisManager.h \
     src/rrns_db/RedisManager.h \
     src/rrns_db/RedisConsumer.h \
     src/rrns_db/RedisDB_global.h \
@@ -59,15 +61,16 @@ SOURCES += \
     src/rrns_db/RedisConsumer.cpp \
     src/rrns_db/RedisDB_Wrapper.cpp \
     \
-    src/third_party/credis/credis.c
+    src/third_party/credis/credis.c \
 
 test{
 
     HEADERS += \
+        src/rrns_db/ut/MockICredisConnector.h \
         src/rrns_db/ut/MockICredisConsumer.h \
         \
         src/third_party/gmock/gmock/gmock.h \
-        src/third_party/gmock/gtest/gtest.h
+        src/third_party/gmock/gtest/gtest.h \
 
 
     SOURCES += \
@@ -75,10 +78,9 @@ test{
         src/rrns_db/ut/RedisManager_UT.cpp \
         src/rrns_db/ut/Main_UT.cpp \
         \
-        src/third_party/gmock/gmock-gtest-all.cc
+        src/third_party/gmock/gmock-gtest-all.cc \
 }
 
 #Google logging framework
-#LIBS += -L$$_PRO_FILE_PWD_/src/third_party/gmock/make
 LIBS += -L/usr/local/lib
 LIBS += -lglog
