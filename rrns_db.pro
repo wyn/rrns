@@ -43,8 +43,6 @@ DEPENDPATH += . \
     /usr/local/include
 
 #actual header/source files to build
-#TODO should build credis to a static lib?
-#TODO should build gmock to a static lib?
 HEADERS += \
     src/rrns_db/ICredisConsumer.h \
     src/rrns_db/ICredisConnector.h \
