@@ -13,21 +13,10 @@ namespace rrns_db
         {
         public:
 
-            MOCK_METHOD1( RegisterConnection, void(ICredisConnector *conn) );
+            MOCK_CONST_METHOD2( CanConsume, bool(ICredis *rh, const std::string &dataKey) );
 
-            MOCK_CONST_METHOD2( StreamExists, bool(const std::string &major, const std::string &minor) );
+            MOCK_CONST_METHOD3( GetRandoms, std::list<double>(ICredis *rh,  const std::string &dataKey, int count) );
 
-            MOCK_METHOD2( RegisterStream, void(const std::string &major, const std::string &minor) );
-
-            MOCK_CONST_METHOD0( CanConsume, bool() );
-
-            MOCK_CONST_METHOD1( GetRandoms, std::list<double>(int count) );
-
-            MOCK_METHOD0( Reset, void() );
-
-            MOCK_CONST_METHOD0( MajorType, std::string() );
-
-            MOCK_CONST_METHOD0( MinorType, std::string() );
         };
 
     } //namespace test

@@ -19,8 +19,10 @@ test{
     CONFIG   -= console
     TEMPLATE = lib
     TARGET = lib/rrns_db
-    #need to make sure the generated dylib has the correct install name baked in
-    QMAKE_LFLAGS_SONAME = -install_name$${LITERAL_WHITESPACE}@executable_path/../lib/
+    mac{
+        #need to make sure the generated dylib has the correct install name baked in
+        QMAKE_LFLAGS_SONAME = -install_name$${LITERAL_WHITESPACE}@executable_path/../lib/
+    }
 }
 
 MOC_DIR = mocs
@@ -35,12 +37,13 @@ INCLUDEPATH += . \
     src/third_party \
     src/third_party/credis \
     src/third_party/gmock \
+    src/third_party/boost \
 
 #headers that are reasonably stable
 DEPENDPATH += . \
     src \
     src/third_party \
-    /usr/local/include
+    /usr/local/include \
 
 #actual header/source files to build
 HEADERS += \
@@ -53,6 +56,10 @@ HEADERS += \
     src/rrns_db/RedisDB_Wrapper.h \
     \
     src/third_party/credis/credis.h \
+    src/rrns_db/IKeyParser.h \
+    src/rrns_db/IKey.h \
+    src/rrns_db/IdDataKey.h \
+    src/rrns_db/ICredis.h
 
 SOURCES += \
     src/rrns_db/RedisManager.cpp \
@@ -60,12 +67,17 @@ SOURCES += \
     src/rrns_db/RedisDB_Wrapper.cpp \
     \
     src/third_party/credis/credis.c \
+    src/rrns_db/IdDataKey.cpp
 
 test{
 
     HEADERS += \
+        src/rrns_db/ut/MockICredis.h \
         src/rrns_db/ut/MockICredisConnector.h \
         src/rrns_db/ut/MockICredisConsumer.h \
+        src/rrns_db/ut/MockIRedisManager.h \
+        src/rrns_db/ut/MockIKeyParser.h \
+        src/rrns_db/ut/MockIKey.h \
         \
         src/third_party/gmock/gmock/gmock.h \
         src/third_party/gmock/gtest/gtest.h \

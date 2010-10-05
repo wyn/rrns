@@ -1,4 +1,9 @@
 #include "RedisConsumer.h"
+#include "glog/logging.h"
+#include "ICredis.h"
+#include "ICredisConnector.h"
+
+#include <sstream>
 
 using namespace rrns_db;
 
@@ -18,77 +23,49 @@ struct RedisConnection {
 static const RedisConnection defaults("localhost", 6379, 2000);
 
 RedisConsumer::RedisConsumer()
-    : dbHandle(credis_connect(defaults.host, defaults.port, defaults.timeout))
-    , majorType("")
-    , minorType("")
-    , seed(0)
-    , id(0)
-{}
-
-RedisConsumer::RedisConsumer(const QString &hostname, int port, int timeout)
-    : dbHandle(credis_connect(hostname.toStdString().c_str(), port, timeout))
-    , majorType("")
-    , minorType("")
-    , seed(0)
-    , id(0)
-{}
-
-RedisConsumer::~RedisConsumer()
 {
-    if (dbHandle)
-        credis_close(dbHandle);
 }
 
-bool RedisConsumer::Register(const QString &major, const QString &minor)
+bool RedisConsumer::CanConsume(ICredis *rh, const std::string &dataKey) const
 {
-    if (!ValidHandle())
+    CHECK_NOTNULL(rh);
+    DLOG(INFO) << "CanConsume";
+
+    return (0 == rh->exists(dataKey.c_str()));
+}
+
+std::list<double> RedisConsumer::GetRandoms(ICredis *rh, const std::string &dataKey, int count) const
+{
+    CHECK_NOTNULL(rh);
+    DLOG(INFO) << "GetRandoms";
+
+    if (!CanConsume(rh, dataKey))
     {
-        qDebug("No Redis connection");
-        return false;
+        DLOG(ERROR) << "Cannot consume data for " << dataKey;
+        return std::list<double>();
     }
 
-    //check major and minor modes are in db
-    //retrieve an id for a data stream and its seed
-    majorType = major;
-    minorType = minor;
-    seed = 1;
-    id = 1;
-
-    return true;
-}
-
-bool RedisConsumer::Unregister()
-{
-    if (!ValidHandle())
+    //get count x rands for id member
+    std::list<double> l(count);
+    const int max_try(std::max(100, count*3));
+    int i = 0; //for counting how many successful pops we do
+    int j = 0; //for counting up to a max_try before giving up
+    char* el;
+    while (i != count)
     {
-        qDebug("No Redis connection");
-        return false;
+        if (max_try < j++)
+        {
+            LOG(ERROR) << "Reached maximum " << max_try << " tries for " << dataKey;
+            LOG(ERROR) << "Giving up and returning result so far";
+            break;
+        }
+
+        if (0 == rh->lpop(dataKey.c_str(), &el))
+        {
+            l.push_back(strtod(el, NULL));
+            i++;
+        }
     }
 
-    majorType = "";
-    minorType = "";
-    seed = 0;
-    id = 0;
-
-    return true;
-}
-
-bool RedisConsumer::CanConsume() const
-{
-    //check not in unregistered state and that the db connection is still ok
-    return (
-            majorType.compare("") != 0 &&
-            minorType.compare("") != 0 &&
-            seed > 0 &&
-            id > 0 &&
-            ValidHandle()
-            );
-}
-
-bool RedisConsumer::ValidHandle() const
-{
-    if (dbHandle)
-        return (0 == credis_ping(dbHandle));
-
-    return false;
+    return l;
 }

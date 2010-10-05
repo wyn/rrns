@@ -6,8 +6,10 @@
 namespace rrns_db {
 
     //forwards
+    class ICredis;
     class ICredisConsumer;
     class ICredisConnector;
+    class IKeyParser;
 
     class RedisManager : public IRedisManager
     {
@@ -15,40 +17,33 @@ namespace rrns_db {
     public:
 
         //construct/destruct
-        RedisManager(ICredisConsumer *consumer, ICredisConnector *connector);
-        virtual ~RedisManager();
+        RedisManager(ICredis *credis, ICredisConsumer *consumer, ICredisConnector *connector, IKeyParser *parser);
 
         //Connect/disconnect with db
         virtual void Connect(const std::string &host, int port, int timeout);
         virtual void Disconnect();
 
         //Register/unregister with a RN data stream
-        virtual void Register(const std::string &major, const std::string &minor);
+        virtual void Register(const std::string &majorKey, const std::string &minorKey);
         virtual void Unregister();
-
-        //readonly class state
-        virtual std::string MajorType() const;
-        virtual std::string MinorType() const;
 
         //consuming data
         virtual bool CanConsume() const;
-        virtual bool ValidHandle() const;
         virtual std::list<double> GetRandoms(int howMany) const;
-
-    protected:
-        virtual void Reset();
 
     private:
 
         //Redis stuff
-        ICredisConsumer *cons;
-        ICredisConnector *conn;
+        ICredis             *cred;
+        ICredisConsumer     *cons;
+        ICredisConnector    *conn;
+        IKeyParser          *pars;
+        std::string         id;
 
     private:
         //don't want these
         RedisManager(const RedisManager&);
         RedisManager& operator=(const RedisManager&);
-
 
     };
 
