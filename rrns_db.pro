@@ -37,13 +37,13 @@ INCLUDEPATH += . \
     src/third_party \
     src/third_party/credis \
     src/third_party/gmock \
-    src/third_party/boost \
 
 #headers that are reasonably stable
 DEPENDPATH += . \
     src \
     src/third_party \
     /usr/local/include \
+    /usr/local/include/boost \
 
 #actual header/source files to build
 HEADERS += \
@@ -54,20 +54,20 @@ HEADERS += \
     src/rrns_db/RedisConsumer.h \
     src/rrns_db/RedisDB_global.h \
     src/rrns_db/RedisDB_Wrapper.h \
-    \
-    src/third_party/credis/credis.h \
     src/rrns_db/IKeyParser.h \
     src/rrns_db/IKey.h \
     src/rrns_db/IdDataKey.h \
-    src/rrns_db/ICredis.h
+    src/rrns_db/ICredis.h \
+    \
+    src/third_party/credis/credis.h \
 
 SOURCES += \
     src/rrns_db/RedisManager.cpp \
     src/rrns_db/RedisConsumer.cpp \
     src/rrns_db/RedisDB_Wrapper.cpp \
+    src/rrns_db/IdDataKey.cpp \
     \
     src/third_party/credis/credis.c \
-    src/rrns_db/IdDataKey.cpp
 
 test{
 
