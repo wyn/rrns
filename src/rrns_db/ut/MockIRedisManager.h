@@ -22,7 +22,7 @@ namespace rrns_db
 
             //consuming data
             MOCK_CONST_METHOD0( CanConsume, bool() );
-            MOCK_CONST_METHOD1( GetRandoms, std::list<double>(int howMany) );
+            MOCK_CONST_METHOD1( GetRandoms, std::vector<double>(int howMany) );
 
         };
 

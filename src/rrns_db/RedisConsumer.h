@@ -1,12 +1,12 @@
 #ifndef RedisConsumer_H
 #define RedisConsumer_H
 
-#include "ICredisConsumer.h"
+#include "IRedisConsumer.h"
 
 namespace rrns_db
 {
 
-    class RedisConsumer : public ICredisConsumer
+    class RedisConsumer : public IRedisConsumer
     {
 
     public:
@@ -15,7 +15,7 @@ namespace rrns_db
 
         virtual bool CanConsume(ICredis *rh, const std::string &dataKey) const;
 
-        virtual std::list<double> GetRandoms(ICredis *rh,  const std::string &dataKey, int count) const;
+        virtual std::vector<double> GetRandoms(ICredis *rh,  const std::string &dataKey, int count) const;
 
     private:
         //don't want these

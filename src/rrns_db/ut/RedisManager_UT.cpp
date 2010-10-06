@@ -1,6 +1,6 @@
 #include "MockICredis.h"
-#include "MockICredisConsumer.h"
-#include "MockICredisConnector.h"
+#include "MockIRedisConsumer.h"
+#include "MockIRedisConnector.h"
 #include "MockIKeyParser.h"
 #include "RedisManager.h"
 
@@ -15,8 +15,8 @@ using ::testing::NotNull;
 using ::testing::DoAll;
 
 using ::rrns_db::test::MockICredis;
-using ::rrns_db::test::MockICredisConsumer;
-using ::rrns_db::test::MockICredisConnector;
+using ::rrns_db::test::MockIRedisConsumer;
+using ::rrns_db::test::MockIRedisConnector;
 using ::rrns_db::test::MockIKeyParser;
 using ::rrns_db::RedisManager;
 
@@ -70,8 +70,8 @@ class RedisManagerTest : public ::testing::Test {
 TEST_F(RedisManagerTest, CanConnect) {
 
     MockICredis cred;
-    MockICredisConsumer cons;
-    MockICredisConnector conn;
+    MockIRedisConsumer cons;
+    MockIRedisConnector conn;
     MockIKeyParser p;
 
     EXPECT_CALL(conn, Connect(host, port, timeout))
@@ -88,8 +88,8 @@ TEST_F(RedisManagerTest, CanConnect) {
 TEST_F(RedisManagerTest, CanDisconnect) {
 
     MockICredis cred;
-    MockICredisConsumer cons;
-    MockICredisConnector conn;
+    MockIRedisConsumer cons;
+    MockIRedisConnector conn;
     MockIKeyParser p;
 
     EXPECT_CALL(conn, Disconnect())
@@ -111,8 +111,8 @@ ACTION_P(SetArg1, c){
 TEST_F(RedisManagerTest, CanRegister) {
 
     MockICredis cred;
-    MockICredisConsumer cons;
-    MockICredisConnector conn;
+    MockIRedisConsumer cons;
+    MockIRedisConnector conn;
     MockIKeyParser p;
 
     ON_CALL(conn, IsValidHandle())
@@ -160,8 +160,8 @@ TEST_F(RedisManagerTest, CanRegister) {
 TEST_F(RedisManagerTest, CanNotRegister_InvalidHandle) {
 
     MockICredis cred;
-    MockICredisConsumer cons;
-    MockICredisConnector conn;
+    MockIRedisConsumer cons;
+    MockIRedisConnector conn;
     MockIKeyParser p;
 
     //is invalid handle so just quits after checking
@@ -194,8 +194,8 @@ TEST_F(RedisManagerTest, CanNotRegister_InvalidHandle) {
 TEST_F(RedisManagerTest, CanNotRegister_CannotAddTmpKey) {
 
     MockICredis cred;
-    MockICredisConsumer cons;
-    MockICredisConnector conn;
+    MockIRedisConsumer cons;
+    MockIRedisConnector conn;
     MockIKeyParser p;
 
     ON_CALL(conn, IsValidHandle())
@@ -231,8 +231,8 @@ TEST_F(RedisManagerTest, CanNotRegister_CannotAddTmpKey) {
 TEST_F(RedisManagerTest, CanNotRegister_CannotIntersectSets) {
 
     MockICredis cred;
-    MockICredisConsumer cons;
-    MockICredisConnector conn;
+    MockIRedisConsumer cons;
+    MockIRedisConnector conn;
     MockIKeyParser p;
 
     ON_CALL(conn, IsValidHandle())
@@ -269,8 +269,8 @@ TEST_F(RedisManagerTest, CanNotRegister_CannotIntersectSets) {
 TEST_F(RedisManagerTest, CanNotRegister_CannotPopFromTempSet) {
 
     MockICredis cred;
-    MockICredisConsumer cons;
-    MockICredisConnector conn;
+    MockIRedisConsumer cons;
+    MockIRedisConnector conn;
     MockIKeyParser p;
 
     ON_CALL(conn, IsValidHandle())
@@ -306,8 +306,8 @@ TEST_F(RedisManagerTest, CanNotRegister_CannotPopFromTempSet) {
 TEST_F(RedisManagerTest, CanNotRegister_CannotSerialiseNewIdKey) {
 
     MockICredis cred;
-    MockICredisConsumer cons;
-    MockICredisConnector conn;
+    MockIRedisConsumer cons;
+    MockIRedisConnector conn;
     MockIKeyParser p;
 
     ON_CALL(conn, IsValidHandle())
@@ -343,8 +343,8 @@ TEST_F(RedisManagerTest, CanNotRegister_CannotSerialiseNewIdKey) {
 TEST_F(RedisManagerTest, CanUnregister) {
 
     MockICredis cred;
-    MockICredisConsumer cons;
-    MockICredisConnector conn;
+    MockIRedisConsumer cons;
+    MockIRedisConnector conn;
     MockIKeyParser p;
 
     //don't disconnect
@@ -359,8 +359,8 @@ TEST_F(RedisManagerTest, CanUnregister) {
 TEST_F(RedisManagerTest, TestCanConsume) {
 
     MockICredis cred;
-    MockICredisConsumer cons;
-    MockICredisConnector conn;
+    MockIRedisConsumer cons;
+    MockIRedisConnector conn;
     MockIKeyParser p;
 
     EXPECT_CALL(cons, CanConsume(&cred, _))
@@ -374,11 +374,11 @@ TEST_F(RedisManagerTest, TestCanConsume) {
 TEST_F(RedisManagerTest, TestGetRandoms) {
 
     MockICredis cred;
-    MockICredisConsumer cons;
-    MockICredisConnector conn;
+    MockIRedisConsumer cons;
+    MockIRedisConnector conn;
     MockIKeyParser p;
 
-    std::list<double> rs;
+    std::vector<double> rs;
     const int howMany = 10;
 
     EXPECT_CALL(cons, GetRandoms(&cred, _, howMany))

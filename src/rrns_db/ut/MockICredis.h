@@ -8,7 +8,7 @@ namespace test {
 class MockICredis : public ICredis {
  public:
   MOCK_METHOD1(SetConnector,
-      void(ICredisConnector *connection));
+      void(IRedisConnector *connection));
   MOCK_METHOD0(ClearConnector,
       void());
   MOCK_METHOD0(errorreply,

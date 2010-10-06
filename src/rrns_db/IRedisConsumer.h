@@ -2,22 +2,22 @@
 #define ICREDISCONSUMER_H
 
 #include <string>
-#include <list>
+#include <vector>
 
 //want this interface to take care of our general Redis needs for listening to a stream of rands (using numeric types)
 namespace rrns_db {
 
     class ICredis;
 
-    class ICredisConsumer
+    class IRedisConsumer
     {
     public:
 
-        virtual ~ICredisConsumer() {}
+        virtual ~IRedisConsumer() {}
 
         virtual bool CanConsume(ICredis *rh, const std::string &dataKey) const = 0;
 
-        virtual std::list<double> GetRandoms(ICredis *rh,  const std::string &dataKey, int count) const = 0;
+        virtual std::vector<double> GetRandoms(ICredis *rh,  const std::string &dataKey, int count) const = 0;
 
     };
 

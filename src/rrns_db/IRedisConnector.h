@@ -1,5 +1,5 @@
-#ifndef ICREDISCONNECTOR_H
-#define ICREDISCONNECTOR_H
+#ifndef IREDISCONNECTOR_H
+#define IREDISCONNECTOR_H
 
 #include "credis.h"
 #include <string>
@@ -7,11 +7,11 @@
 //want this interface to take care of our general needs for connecting to a REDIS db
 namespace rrns_db {
 
-    class ICredisConnector
+    class IRedisConnector
     {
     public:
 
-        virtual ~ICredisConnector() {}
+        virtual ~IRedisConnector() {}
 
         virtual void Connect(const std::string &hostname, int port, int timeout) = 0;
 
@@ -25,4 +25,4 @@ namespace rrns_db {
 
 } //namespace rrns_db
 
-#endif // ICREDISCONNECTOR_H
+#endif // IREDISCONNECTOR_H

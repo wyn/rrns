@@ -1,7 +1,7 @@
 #ifndef MOCKICREDISCONNECTOR_H
 #define MOCKICREDISCONNECTOR_H
 
-#include "ICredisConnector.h"
+#include "IRedisConnector.h"
 #include "gmock/gmock.h"
 
 namespace rrns_db
@@ -9,7 +9,7 @@ namespace rrns_db
     namespace test
     {
 
-        class MockICredisConnector : public ICredisConnector
+        class MockIRedisConnector : public IRedisConnector
         {
         public:
 

@@ -1,7 +1,7 @@
 #include "RedisManager.h"
 #include "ICredis.h"
-#include "ICredisConsumer.h"
-#include "ICredisConnector.h"
+#include "IRedisConsumer.h"
+#include "IRedisConnector.h"
 #include "IKeyParser.h"
 #include "IKey.h"
 
@@ -48,7 +48,7 @@ private:
 
 };
 
-RedisManager::RedisManager(ICredis *credis, ICredisConsumer *consumer, ICredisConnector *connector, IKeyParser *parser)
+RedisManager::RedisManager(ICredis *credis, IRedisConsumer *consumer, IRedisConnector *connector, IKeyParser *parser)
     : cred(CHECK_NOTNULL(credis))
     , cons(CHECK_NOTNULL(consumer))
     , conn(CHECK_NOTNULL(connector))
@@ -128,7 +128,7 @@ bool RedisManager::CanConsume() const
     return cons->CanConsume(cred, id);
 }
 
-std::list<double> RedisManager::GetRandoms(int howMany) const
+std::vector<double> RedisManager::GetRandoms(int howMany) const
 {
     return cons->GetRandoms(cred, id, howMany);
 }

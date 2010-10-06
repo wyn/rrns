@@ -1,7 +1,17 @@
 #include "RedisConsumer.h"
-#include "credis.h"
+#include "MockICredis.h"
+
+#include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include <stdio.h>
+
+using ::testing::_;
+using ::testing::Return;
+using ::testing::NotNull;
+using ::testing::DoAll;
+using ::testing::AtLeast;
+
+using ::rrns_db::test::MockICredis;
+using ::rrns_db::RedisConsumer;
 
 namespace {
 
@@ -35,29 +45,132 @@ class RedisConsumerTest : public ::testing::Test {
   // Objects declared here can be used by all tests in the test case for Foo.
 };
 
-TEST_F(RedisConsumerTest, Playing_GrabListRange) {
+TEST_F(RedisConsumerTest, TestCanConsume) {
 
-    REDIS rh = credis_connect("localhost", 6379, 2000);
-    credis_flushdb(rh);
+    MockICredis mock;
+    const std::string key("key");
 
-    for (int i(0); i != 10; i++)
+    EXPECT_CALL(mock, exists(key.c_str()))
+            .WillOnce(Return(0));
+
+    RedisConsumer r;
+    ASSERT_TRUE(r.CanConsume(&mock, key));
+}
+
+TEST_F(RedisConsumerTest, TestCannotConsume) {
+
+    MockICredis mock;
+    const std::string key("key");
+
+    EXPECT_CALL(mock, exists(key.c_str()))
+            .WillOnce(Return(-1));
+
+    RedisConsumer r;
+    ASSERT_FALSE(r.CanConsume(&mock, key));
+}
+
+//templates seem to go crazy and not compile with things like SetArgumentPointee
+//so using ACTION* macro
+ACTION_P(SetArg1, c){
+    *arg1 = c;
+};
+
+TEST_F(RedisConsumerTest, TestGetRandoms) {
+
+    MockICredis mock;
+    const std::string key("key");
+    size_t howMany = 10;
+
+    EXPECT_CALL(mock, exists(key.c_str()))
+            .WillOnce(Return(0));
+
+    char c[2] = { '1', '2' };
+    ON_CALL(mock, lpop(key.c_str(), NotNull()))
+            .WillByDefault(DoAll(
+                    SetArg1<char*>(c),
+                    Return(0)));
+
+    EXPECT_CALL(mock, lpop(key.c_str(), NotNull()))
+            .Times(howMany);
+
+    RedisConsumer r;
+    std::vector<double> l(r.GetRandoms(&mock, key, howMany));
+
+    ASSERT_EQ(howMany, l.size());
+    for (size_t i(0); i!=l.size(); ++i)
     {
-        double d = i*1.0000001;
-        char c[22];
-        sprintf(c, "%20.10e", d);
-        credis_rpush(rh, "test1", c);
+        ASSERT_EQ(12.0, l[i]);
     }
 
-    for (int i(0); i != 10; i++)
+}
+
+TEST_F(RedisConsumerTest, TestGetRandoms_LotsMoreThanDefaultMax) {
+
+    MockICredis mock;
+    const std::string key("key");
+    size_t howMany = 200; //needs to be bigger than RedisConsumer.cpp::default_max = 100
+
+    EXPECT_CALL(mock, exists(key.c_str()))
+            .WillOnce(Return(0));
+
+    char c[2] = { '1', '2' };
+    ON_CALL(mock, lpop(key.c_str(), NotNull()))
+            .WillByDefault(DoAll(
+                    SetArg1<char*>(c),
+                    Return(0)));
+
+    EXPECT_CALL(mock, lpop(key.c_str(), NotNull()))
+            .Times(howMany);
+
+    RedisConsumer r;
+    std::vector<double> l(r.GetRandoms(&mock, key, howMany));
+
+    ASSERT_EQ(howMany, l.size());
+    for (size_t i(0); i!=l.size(); ++i)
     {
-        char *c;
-        credis_lpop(rh, "test1", &c);
-        double d(strtod(c, NULL));
-        std::cout << "Popping back out: " << d*1.0e10 << std::endl;
+        ASSERT_EQ(12.0, l[i]);
     }
 
-    credis_close(rh);
+}
 
+TEST_F(RedisConsumerTest, TestGetRandoms_CannotConsume) {
+
+    MockICredis mock;
+    const std::string key("key");
+
+    EXPECT_CALL(mock, exists(key.c_str()))
+            .WillOnce(Return(-1));
+
+    EXPECT_CALL(mock, lpop(_, _))
+            .Times(0);
+
+    RedisConsumer r;
+    std::vector<double> l(r.GetRandoms(&mock, key, 10));
+
+    ASSERT_TRUE(l.empty());
+}
+
+TEST_F(RedisConsumerTest, TestGetRandoms_CannotPop) {
+
+    MockICredis mock;
+    const std::string key("key");
+
+    EXPECT_CALL(mock, exists(key.c_str()))
+            .WillOnce(Return(0));
+
+    char c[2] = { '1', '2' };
+    ON_CALL(mock, lpop(key.c_str(), NotNull()))
+            .WillByDefault(DoAll(
+                    SetArg1<char*>(c),
+                    Return(-1)));
+
+    EXPECT_CALL(mock, lpop(key.c_str(), NotNull()))
+            .Times(AtLeast(1));
+
+    RedisConsumer r;
+    std::vector<double> l(r.GetRandoms(&mock, key, 10));
+
+    ASSERT_TRUE(l.empty());
 }
 
 }  // namespace
