@@ -21,7 +21,9 @@ class RedisConsumerTest : public ::testing::Test {
   // You can remove any or all of the following functions if its body
   // is empty.
 
-  RedisConsumerTest() {
+  RedisConsumerTest()
+      : key("key")
+  {
     // You can do set-up work for each test here.
   }
 
@@ -43,12 +45,12 @@ class RedisConsumerTest : public ::testing::Test {
   }
 
   // Objects declared here can be used by all tests in the test case for Foo.
+  const std::string key;
 };
 
 TEST_F(RedisConsumerTest, TestCanConsume) {
 
     MockICredis mock;
-    const std::string key("key");
 
     EXPECT_CALL(mock, exists(key.c_str()))
             .WillOnce(Return(0));
@@ -60,7 +62,6 @@ TEST_F(RedisConsumerTest, TestCanConsume) {
 TEST_F(RedisConsumerTest, TestCannotConsume) {
 
     MockICredis mock;
-    const std::string key("key");
 
     EXPECT_CALL(mock, exists(key.c_str()))
             .WillOnce(Return(-1));
@@ -78,7 +79,6 @@ ACTION_P(SetArg1, c){
 TEST_F(RedisConsumerTest, TestGetRandoms) {
 
     MockICredis mock;
-    const std::string key("key");
     size_t howMany = 10;
 
     EXPECT_CALL(mock, exists(key.c_str()))
@@ -107,7 +107,6 @@ TEST_F(RedisConsumerTest, TestGetRandoms) {
 TEST_F(RedisConsumerTest, TestGetRandoms_LotsMoreThanDefaultMax) {
 
     MockICredis mock;
-    const std::string key("key");
     size_t howMany = 200; //needs to be bigger than RedisConsumer.cpp::default_max = 100
 
     EXPECT_CALL(mock, exists(key.c_str()))
@@ -136,7 +135,6 @@ TEST_F(RedisConsumerTest, TestGetRandoms_LotsMoreThanDefaultMax) {
 TEST_F(RedisConsumerTest, TestGetRandoms_CannotConsume) {
 
     MockICredis mock;
-    const std::string key("key");
 
     EXPECT_CALL(mock, exists(key.c_str()))
             .WillOnce(Return(-1));
@@ -153,7 +151,6 @@ TEST_F(RedisConsumerTest, TestGetRandoms_CannotConsume) {
 TEST_F(RedisConsumerTest, TestGetRandoms_CannotPop) {
 
     MockICredis mock;
-    const std::string key("key");
 
     EXPECT_CALL(mock, exists(key.c_str()))
             .WillOnce(Return(0));

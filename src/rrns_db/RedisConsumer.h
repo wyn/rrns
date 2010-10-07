@@ -18,6 +18,10 @@ namespace rrns_db
         virtual std::vector<double> GetRandoms(const ICredis *rh,  const std::string &dataKey, int count) const;
 
     private:
+        static const int default_max;
+        static const int default_max_factor;
+
+    private:
         //don't want these
         RedisConsumer(const RedisConsumer&);
         RedisConsumer& operator=(const RedisConsumer&);

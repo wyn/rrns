@@ -38,6 +38,8 @@ namespace rrns_db {
 
     private:
 
+        static const std::string unknown_id;
+
         //Redis stuff
         std::string      id_;
         ICredis         *credis_;

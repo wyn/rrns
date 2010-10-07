@@ -54,25 +54,38 @@ HEADERS += \
     src/rrns_db/RedisDB_Wrapper.h \
     src/rrns_db/IKeyParser.h \
     src/rrns_db/IKey.h \
-    src/rrns_db/IdDataKey.h \
     src/rrns_db/ICredis.h \
     src/rrns_db/CredisAdapter.h \
     src/rrns_db/RedisConnector.h \
     src/rrns_db/Key.h \
     src/rrns_db/IKeyGenerator.h \
     src/rrns_db/ScopedTemporaryKey.h \
+    src/rrns_db/MajorTypeKeyGenerator.h \
+    src/rrns_db/MinorTypeKeyGenerator.h \
+    src/rrns_db/DataKeyGenerator.h \
+    src/rrns_db/SeedKeyGenerator.h \
+    src/rrns_db/CutoffKeyGenerator.h \
     \
     src/third_party/credis/credis.h \
+    src/rrns_db/KeyParser.h
 
 SOURCES += \
     src/rrns_db/RedisManager.cpp \
     src/rrns_db/RedisConsumer.cpp \
     src/rrns_db/RedisDB_Wrapper.cpp \
-    src/rrns_db/IdDataKey.cpp \
     src/rrns_db/CredisAdapter.cpp \
     src/rrns_db/RedisConnector.cpp \
+    src/rrns_db/ScopedTemporaryKey.cpp \
+    src/rrns_db/MajorTypeKeyGenerator.cpp \
+    src/rrns_db/MinorTypeKeyGenerator.cpp \
+    src/rrns_db/DataKeyGenerator.cpp \
+    src/rrns_db/SeedKeyGenerator.cpp \
+    src/rrns_db/CutoffKeyGenerator.cpp \
     \
     src/third_party/credis/credis.c \
+    src/rrns_db/ut/ScopedKeyGenerator_UT.cpp \
+    src/rrns_db/KeyParser.cpp \
+    src/rrns_db/ut/KeyParser_UT.cpp
 
 test{
 

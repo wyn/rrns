@@ -7,23 +7,8 @@
 
 using namespace rrns_db;
 
-struct RedisConnection {
-
-    RedisConnection(const char *h, const int p, const int t)
-        : host(h)
-        , port(p)
-        , timeout(t)
-    {}
-
-    const char *host;
-    const int port;
-    const int timeout;
-};
-
-static const RedisConnection defaults("localhost", 6379, 2000);
-
-static const int default_max(100);
-static const int default_max_factor(3);
+const int RedisConsumer::default_max = 100;
+const int RedisConsumer::default_max_factor = 3;
 
 RedisConsumer::RedisConsumer()
 {

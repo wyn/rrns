@@ -154,7 +154,7 @@ TEST_F(RedisManagerTest, CanRegister) {
                     SetArg1<char*>(c),
                     Return(0)));
 
-    boost::shared_ptr<IKey> key(new Key("","",""));
+    boost::shared_ptr<IKey> key(new Key("Ids","12","Data"));
     EXPECT_CALL(gen, ScalarKey(_))
             .WillOnce(Return(key));
 

@@ -11,13 +11,13 @@
 
 using namespace rrns_db;
 
-static const std::string unknown_id("unknown");
-
 static std::string MakeTemporaryKeyString(const std::string &major, const std::string &minor)
 {
     //timestamp the key too to make unique
     return ("tmp:" + major + ":intersect:" + minor);
 }
+
+const std::string RedisManager::unknown_id("unknown");
 
 RedisManager::RedisManager(ICredis *credis,
                            IRedisConnector *connector,
