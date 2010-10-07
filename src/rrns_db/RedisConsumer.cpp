@@ -29,7 +29,7 @@ RedisConsumer::RedisConsumer()
 {
 }
 
-bool RedisConsumer::CanConsume(ICredis *rh, const std::string &dataKey) const
+bool RedisConsumer::CanConsume(const ICredis *rh, const std::string &dataKey) const
 {
     CHECK_NOTNULL(rh);
     DLOG(INFO) << "CanConsume";
@@ -37,7 +37,7 @@ bool RedisConsumer::CanConsume(ICredis *rh, const std::string &dataKey) const
     return (0 == rh->exists(dataKey.c_str()));
 }
 
-std::vector<double> RedisConsumer::GetRandoms(ICredis *rh, const std::string &dataKey, int count) const
+std::vector<double> RedisConsumer::GetRandoms(const ICredis *rh, const std::string &dataKey, int count) const
 {
     CHECK_NOTNULL(rh);
     DLOG(INFO) << "GetRandoms";

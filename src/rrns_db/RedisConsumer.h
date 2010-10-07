@@ -13,9 +13,9 @@ namespace rrns_db
 
         RedisConsumer();
 
-        virtual bool CanConsume(ICredis *rh, const std::string &dataKey) const;
+        virtual bool CanConsume(const ICredis *rh, const std::string &dataKey) const;
 
-        virtual std::vector<double> GetRandoms(ICredis *rh,  const std::string &dataKey, int count) const;
+        virtual std::vector<double> GetRandoms(const ICredis *rh,  const std::string &dataKey, int count) const;
 
     private:
         //don't want these

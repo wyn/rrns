@@ -23,73 +23,73 @@ namespace rrns_db
 
         /* if a function call returns error it is _possible_ that the Redis server
          * replied with an error message. It is returned by this function. */
-        virtual char* errorreply();
+        virtual char* errorreply() const;
 
         /*
          * Commands operating on all the kind of values
          */
 
         /* returns -1 if the key doesn't exists and 0 if it does */
-        virtual int exists(const char *key);
+        virtual int exists(const char *key) const;
 
         /* returns -1 if the key doesn't exists and 0 if it was removed
          * TODO add support to (Redis >= 1.1) remove multiple keys
          */
-        virtual int del(const char *key);
+        virtual int del(const char *key) const;
 
         /* returns type, refer to CREDIS_TYPE_* defines */
-        virtual int type(const char *key);
+        virtual int type(const char *key) const;
 
         /* returns number of keys returned in vector `keyv' */
-        virtual int keys(const char *pattern, char ***keyv);
+        virtual int keys(const char *pattern, char ***keyv) const;
 
-        virtual int randomkey(char **key);
+        virtual int randomkey(char **key) const;
 
-        virtual int rename(const char *key, const char *new_key_name);
+        virtual int rename(const char *key, const char *new_key_name) const;
 
         /* returns -1 if the key already exists */
-        virtual int renamenx(const char *key, const char *new_key_name);
+        virtual int renamenx(const char *key, const char *new_key_name) const;
 
         /* returns size of db */
-        virtual int dbsize();
+        virtual int dbsize() const;
 
         /* returns -1 if the timeout was not set; either due to key already has
            an associated timeout or key does not exist */
-        virtual int expire(const char *key, int secs);
+        virtual int expire(const char *key, int secs) const;
 
         /* returns time to live seconds or -1 if key does not exists or does not
          * have expire set */
-        virtual int ttl(const char *key);
+        virtual int ttl(const char *key) const;
 
-        virtual int select(int index);
+        virtual int select(int index) const;
 
         /* returns -1 if the key was not moved; already present at target
          * or not found on current db */
-        virtual int move(const char *key, int index);
+        virtual int move(const char *key, int index) const;
 
-        virtual int flushdb();
+        virtual int flushdb() const;
 
-        virtual int flushall();
+        virtual int flushall() const;
 
 
         /*
          * Commands operating on string values
          */
 
-        virtual int set(const char *key, const char *val);
+        virtual int set(const char *key, const char *val) const;
 
         /* returns -1 if the key doesn't exists */
-        virtual int get(const char *key, char **val);
+        virtual int get(const char *key, char **val) const;
 
         /* returns -1 if the key doesn't exists */
-        virtual int getset(const char *key, const char *set_val, char **get_val);
+        virtual int getset(const char *key, const char *set_val, char **get_val) const;
 
         /* returns number of values returned in vector `valv'. `keyc' is the number of
          * keys stored in `keyv'. */
-        virtual int mget(int keyc, const char **keyv, char ***valv);
+        virtual int mget(int keyc, const char **keyv, char ***valv) const;
 
         /* returns -1 if the key already exists and hence not set */
-        virtual int setnx(const char *key, const char *val);
+        virtual int setnx(const char *key, const char *val) const;
 
         /* TODO
          * SETEX key time value Set+Expire combo command
@@ -98,52 +98,52 @@ namespace rrns_db
          */
 
         /* if `new_val' is not NULL it will return the value after the increment was performed */
-        virtual int incr(const char *key, int *new_val);
+        virtual int incr(const char *key, int *new_val) const;
 
         /* if `new_val' is not NULL it will return the value after the increment was performed */
-        virtual int incrby(const char *key, int incr_val, int *new_val);
+        virtual int incrby(const char *key, int incr_val, int *new_val) const;
 
         /* if `new_val' is not NULL it will return the value after the decrement was performed */
-        virtual int decr(const char *key, int *new_val);
+        virtual int decr(const char *key, int *new_val) const;
 
         /* if `new_val' is not NULL it will return the value after the decrement was performed */
-        virtual int decrby(const char *key, int decr_val, int *new_val);
+        virtual int decrby(const char *key, int decr_val, int *new_val) const;
 
         /* returns new length of string after `val' has been appended */
-        virtual int append(const char *key, const char *val);
+        virtual int append(const char *key, const char *val) const;
 
-        virtual int substr(const char *key, int start, int end, char **substr);
+        virtual int substr(const char *key, int start, int end, char **substr) const;
 
 
         /*
          * Commands operating on lists
          */
 
-        virtual int rpush(const char *key, const char *element);
+        virtual int rpush(const char *key, const char *element) const;
 
-        virtual int lpush(const char *key, const char *element);
+        virtual int lpush(const char *key, const char *element) const;
 
         /* returns length of list */
-        virtual int llen(const char *key);
+        virtual int llen(const char *key) const;
 
         /* returns number of elements returned in vector `elementv' */
-        virtual int lrange(const char *key, int start, int range, char ***elementv);
+        virtual int lrange(const char *key, int start, int range, char ***elementv) const;
 
-        virtual int ltrim(const char *key, int start, int end);
+        virtual int ltrim(const char *key, int start, int end) const;
 
         /* returns -1 if the key doesn't exists */
-        virtual int lindex(const char *key, int index, char **element);
+        virtual int lindex(const char *key, int index, char **element) const;
 
-        virtual int lset(const char *key, int index, const char *element);
+        virtual int lset(const char *key, int index, const char *element) const;
 
         /* returns number of elements removed */
-        virtual int lrem(const char *key, int count, const char *element);
+        virtual int lrem(const char *key, int count, const char *element) const;
 
         /* returns -1 if the key doesn't exists */
-        virtual int lpop(const char *key, char **val);
+        virtual int lpop(const char *key, char **val) const;
 
         /* returns -1 if the key doesn't exists */
-        virtual int rpop(const char *key, char **val);
+        virtual int rpop(const char *key, char **val) const;
 
         /* TODO
          * BLPOP key1 key2 ... keyN timeout Blocking LPOP
@@ -157,47 +157,47 @@ namespace rrns_db
          */
 
         /* returns -1 if the given member was already a member of the set */
-        virtual int sadd(const char *key, const char *member);
+        virtual int sadd(const char *key, const char *member) const;
 
         /* returns -1 if the given member is not a member of the set */
-        virtual int srem(const char *key, const char *member);
+        virtual int srem(const char *key, const char *member) const;
 
         /* returns -1 if the given key doesn't exists else value is returned in `member' */
-        virtual int spop(const char *key, char **member);
+        virtual int spop(const char *key, char **member) const;
 
         /* returns -1 if the member doesn't exists in the source set */
         virtual int smove(const char *sourcekey, const char *destkey,
-                         const char *member);
+                         const char *member) const;
 
         /* returns cardinality (number of members) or 0 if the given key doesn't exists */
-        virtual int scard(const char *key);
+        virtual int scard(const char *key) const;
 
         /* returns -1 if the key doesn't exists and 0 if it does */
-        virtual int sismember(const char *key, const char *member);
+        virtual int sismember(const char *key, const char *member) const;
 
         /* returns number of members returned in vector `members'. `keyc' is the number of
          * keys stored in `keyv'. */
-        virtual int sinter(int keyc, const char **keyv, char ***members);
+        virtual int sinter(int keyc, const char **keyv, char ***members) const;
 
         /* `keyc' is the number of keys stored in `keyv' */
-        virtual int sinterstore(const char *destkey, int keyc, const char **keyv);
+        virtual int sinterstore(const char *destkey, int keyc, const char **keyv) const;
 
         /* returns number of members returned in vector `members'. `keyc' is the number of
          * keys stored in `keyv'. */
-        virtual int sunion(int keyc, const char **keyv, char ***members);
+        virtual int sunion(int keyc, const char **keyv, char ***members) const;
 
         /* `keyc' is the number of keys stored in `keyv' */
-        virtual int sunionstore(const char *destkey, int keyc, const char **keyv);
+        virtual int sunionstore(const char *destkey, int keyc, const char **keyv) const;
 
         /* returns number of members returned in vector `members'. `keyc' is the number of
          * keys stored in `keyv'. */
-        virtual int sdiff(int keyc, const char **keyv, char ***members);
+        virtual int sdiff(int keyc, const char **keyv, char ***members) const;
 
         /* `keyc' is the number of keys stored in `keyv' */
-        virtual int sdiffstore(const char *destkey, int keyc, const char **keyv);
+        virtual int sdiffstore(const char *destkey, int keyc, const char **keyv) const;
 
         /* returns number of members returned in vector `members' */
-        virtual int smembers(const char *key, char ***members);
+        virtual int smembers(const char *key, char ***members) const;
 
         /* TODO Redis >= 1.1
          * SRANDMEMBER key Return a random member of the Set value at key
@@ -210,41 +210,41 @@ namespace rrns_db
 
         /* returns -1 if member was already a member of the sorted set and only score was updated,
          * 0 is returned if the new element was added */
-        virtual int zadd(const char *key, double score, const char *member);
+        virtual int zadd(const char *key, double score, const char *member) const;
 
         /* returns -1 if the member was not a member of the sorted set */
-        virtual int zrem(const char *key, const char *member);
+        virtual int zrem(const char *key, const char *member) const;
 
         /* returns -1 if the member was not a member of the sorted set, the score of the member after
          * the increment by `incr_score' is returned by `new_score' */
-        virtual int zincrby(const char *key, double incr_score, const char *member, double *new_score);
+        virtual int zincrby(const char *key, double incr_score, const char *member, double *new_score) const;
 
         /* returns the rank of the given member or -1 if the member was not a member of the sorted set */
-        virtual int zrank(const char *key, const char *member);
+        virtual int zrank(const char *key, const char *member) const;
 
         /* returns the reverse rank of the given member or -1 if the member was not a member of the sorted set */
-        virtual int zrevrank(const char *key, const char *member);
+        virtual int zrevrank(const char *key, const char *member) const;
 
         /* returns number of elements returned in vector `elementv'
          * TODO add support for WITHSCORES */
-        virtual int zrange(const char *key, int start, int end, char ***elementv);
+        virtual int zrange(const char *key, int start, int end, char ***elementv) const;
 
         /* returns number of elements returned in vector `elementv'
          * TODO add support for WITHSCORES */
-        virtual int zrevrange(const char *key, int start, int end, char ***elementv);
+        virtual int zrevrange(const char *key, int start, int end, char ***elementv) const;
 
         /* returns cardinality or -1 if `key' does not exist */
-        virtual int zcard(const char *key);
+        virtual int zcard(const char *key) const;
 
         /* returns -1 if the `key' does not exist or the `member' is not in the sorted set,
          * score is returned in `score' */
-        virtual int zscore(const char *key, const char *member, double *score);
+        virtual int zscore(const char *key, const char *member, double *score) const;
 
         /* returns number of elements removed or -1 if key does not exist */
-        virtual int zremrangebyscore(const char *key, double min, double max);
+        virtual int zremrangebyscore(const char *key, double min, double max) const;
 
         /* returns number of elements removed or -1 if key does not exist */
-        virtual int zremrangebyrank(const char *key, int start, int end);
+        virtual int zremrangebyrank(const char *key, int start, int end) const;
 
         /* TODO
          * ZRANGEBYSCORE key min max Return all the elements with score >= min and score <= max (a range query) from the sorted set
@@ -253,12 +253,12 @@ namespace rrns_db
     //        /* `keyc' is the number of keys stored in `keyv'. `weightv' is optional, if not
     //         * NULL, `keyc' is also the number of weights stored in `weightv'. */
     //        virtual int zinterstore(const char *destkey, int keyc, const char **keyv,
-    //                               const int *weightv, REDIS_AGGREGATE aggregate);
+    //                               const int *weightv, REDIS_AGGREGATE aggregate) const;
 
     //        /* `keyc' is the number of keys stored in `keyv'. `weightv' is optional, if not
     //         * NULL, `keyc' is also the number of weights stored in `weightv'. */
     //        virtual int zunionstore(const char *destkey, int keyc, const char **keyv,
-    //                               const int *weightv, REDIS_AGGREGATE aggregate);
+    //                               const int *weightv, REDIS_AGGREGATE aggregate) const;
 
         /*
          * Commands operating on hashes
@@ -283,7 +283,7 @@ namespace rrns_db
          */
 
         /* returns number of elements returned in vector `elementv' */
-        virtual int sort(const char *query, char ***elementv);
+        virtual int sort(const char *query, char ***elementv) const;
 
 
         /*
@@ -320,43 +320,43 @@ namespace rrns_db
 
         /* On success the number of channels we are currently subscribed to is
          * returned. */
-        virtual int subscribe(const char *channel);
+        virtual int subscribe(const char *channel) const;
 
         /* `channel' specifies the channel to unsubscribe from. If set to NULL
          * all channels are unsubscribed from. On success the number of channels
          * we are currently subscribed to is returned. */
-        virtual int unsubscribe(const char *channel);
+        virtual int unsubscribe(const char *channel) const;
 
         /* On success the number of channels we are currently subscribed to is
          * returned. */
-        virtual int psubscribe(const char *pattern);
+        virtual int psubscribe(const char *pattern) const;
 
         /* `pattern' specifies the channels to unsubscribe from. If set to NULL
          * all are unsubscribed from. On success the number of channels we are
          * currently subscribed to is returned. */
-        virtual int punsubscribe(const char *pattern);
+        virtual int punsubscribe(const char *pattern) const;
 
         /* On success the number of clients that received the message is returned */
-        virtual int publish(const char *channel, const char *message);
+        virtual int publish(const char *channel, const char *message) const;
 
         /* Listen for messages from channels and/or patterns subscribed to */
-        virtual int listen(char **pattern, char **channel, char **message);
+        virtual int listen(char **pattern, char **channel, char **message) const;
 
 
         /*
          * Persistence control commands
          */
 
-        virtual int save();
+        virtual int save() const;
 
-        virtual int bgsave();
+        virtual int bgsave() const;
 
         /* returns UNIX time stamp of last successfull save to disk */
-        virtual int lastsave();
+        virtual int lastsave() const;
 
-        virtual int shutdown();
+        virtual int shutdown() const;
 
-        virtual int bgrewriteaof();
+        virtual int bgrewriteaof() const;
 
 
         /*
@@ -369,12 +369,12 @@ namespace rrns_db
          * of Redis.
          * Information fields not supported by the Redis server connected to, are set
          * to zero. */
-    //        virtual int info(REDIS_INFO *info);
+    //        virtual int info(REDIS_INFO *info) const;
 
-        virtual int monitor();
+        virtual int monitor() const;
 
         /* setting host to NULL and/or port to 0 will turn off replication */
-        virtual int slaveof(const char *host, int port);
+        virtual int slaveof(const char *host, int port) const;
 
         /* TODO
          * CONFIG Configure a Redis server at runtime

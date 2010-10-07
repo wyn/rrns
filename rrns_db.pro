@@ -41,8 +41,6 @@ INCLUDEPATH += . \
 
 #headers that are reasonably stable
 DEPENDPATH += . \
-    src \
-    src/third_party \
     /usr/local/include \
 
 #actual header/source files to build
@@ -60,6 +58,9 @@ HEADERS += \
     src/rrns_db/ICredis.h \
     src/rrns_db/CredisAdapter.h \
     src/rrns_db/RedisConnector.h \
+    src/rrns_db/Key.h \
+    src/rrns_db/IKeyGenerator.h \
+    src/rrns_db/ScopedTemporaryKey.h \
     \
     src/third_party/credis/credis.h \
 
@@ -69,9 +70,9 @@ SOURCES += \
     src/rrns_db/RedisDB_Wrapper.cpp \
     src/rrns_db/IdDataKey.cpp \
     src/rrns_db/CredisAdapter.cpp \
+    src/rrns_db/RedisConnector.cpp \
     \
     src/third_party/credis/credis.c \
-    src/rrns_db/RedisConnector.cpp
 
 test{
 
@@ -82,6 +83,7 @@ test{
         src/rrns_db/ut/MockIRedisManager.h \
         src/rrns_db/ut/MockIKeyParser.h \
         src/rrns_db/ut/MockIKey.h \
+        src/rrns_db/ut/MockIKeyGenerator.h \
         \
         src/third_party/gmock/gmock/gmock.h \
         src/third_party/gmock/gtest/gtest.h \

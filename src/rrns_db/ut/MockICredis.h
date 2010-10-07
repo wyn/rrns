@@ -11,153 +11,153 @@ class MockICredis : public ICredis {
       void(IRedisConnector *connection));
   MOCK_METHOD0(ClearConnector,
       void());
-  MOCK_METHOD0(errorreply,
+  MOCK_CONST_METHOD0(errorreply,
       char*());
-  MOCK_METHOD1(exists,
+  MOCK_CONST_METHOD1(exists,
       int(const char *key));
-  MOCK_METHOD1(del,
+  MOCK_CONST_METHOD1(del,
       int(const char *key));
-  MOCK_METHOD1(type,
+  MOCK_CONST_METHOD1(type,
       int(const char *key));
-  MOCK_METHOD2(keys,
+  MOCK_CONST_METHOD2(keys,
       int(const char *pattern, char ***keyv));
-  MOCK_METHOD1(randomkey,
+  MOCK_CONST_METHOD1(randomkey,
       int(char **key));
-  MOCK_METHOD2(rename,
+  MOCK_CONST_METHOD2(rename,
       int(const char *key, const char *new_key_name));
-  MOCK_METHOD2(renamenx,
+  MOCK_CONST_METHOD2(renamenx,
       int(const char *key, const char *new_key_name));
-  MOCK_METHOD0(dbsize,
+  MOCK_CONST_METHOD0(dbsize,
       int());
-  MOCK_METHOD2(expire,
+  MOCK_CONST_METHOD2(expire,
       int(const char *key, int secs));
-  MOCK_METHOD1(ttl,
+  MOCK_CONST_METHOD1(ttl,
       int(const char *key));
-  MOCK_METHOD1(select,
+  MOCK_CONST_METHOD1(select,
       int(int index));
-  MOCK_METHOD2(move,
+  MOCK_CONST_METHOD2(move,
       int(const char *key, int index));
-  MOCK_METHOD0(flushdb,
+  MOCK_CONST_METHOD0(flushdb,
       int());
-  MOCK_METHOD0(flushall,
+  MOCK_CONST_METHOD0(flushall,
       int());
-  MOCK_METHOD2(set,
+  MOCK_CONST_METHOD2(set,
       int(const char *key, const char *val));
-  MOCK_METHOD2(get,
+  MOCK_CONST_METHOD2(get,
       int(const char *key, char **val));
-  MOCK_METHOD3(getset,
+  MOCK_CONST_METHOD3(getset,
       int(const char *key, const char *set_val, char **get_val));
-  MOCK_METHOD3(mget,
+  MOCK_CONST_METHOD3(mget,
       int(int keyc, const char **keyv, char ***valv));
-  MOCK_METHOD2(setnx,
+  MOCK_CONST_METHOD2(setnx,
       int(const char *key, const char *val));
-  MOCK_METHOD2(incr,
+  MOCK_CONST_METHOD2(incr,
       int(const char *key, int *new_val));
-  MOCK_METHOD3(incrby,
+  MOCK_CONST_METHOD3(incrby,
       int(const char *key, int incr_val, int *new_val));
-  MOCK_METHOD2(decr,
+  MOCK_CONST_METHOD2(decr,
       int(const char *key, int *new_val));
-  MOCK_METHOD3(decrby,
+  MOCK_CONST_METHOD3(decrby,
       int(const char *key, int decr_val, int *new_val));
-  MOCK_METHOD2(append,
+  MOCK_CONST_METHOD2(append,
       int(const char *key, const char *val));
-  MOCK_METHOD4(substr,
+  MOCK_CONST_METHOD4(substr,
       int(const char *key, int start, int end, char **substr));
-  MOCK_METHOD2(rpush,
+  MOCK_CONST_METHOD2(rpush,
       int(const char *key, const char *element));
-  MOCK_METHOD2(lpush,
+  MOCK_CONST_METHOD2(lpush,
       int(const char *key, const char *element));
-  MOCK_METHOD1(llen,
+  MOCK_CONST_METHOD1(llen,
       int(const char *key));
-  MOCK_METHOD4(lrange,
+  MOCK_CONST_METHOD4(lrange,
       int(const char *key, int start, int range, char ***elementv));
-  MOCK_METHOD3(ltrim,
+  MOCK_CONST_METHOD3(ltrim,
       int(const char *key, int start, int end));
-  MOCK_METHOD3(lindex,
+  MOCK_CONST_METHOD3(lindex,
       int(const char *key, int index, char **element));
-  MOCK_METHOD3(lset,
+  MOCK_CONST_METHOD3(lset,
       int(const char *key, int index, const char *element));
-  MOCK_METHOD3(lrem,
+  MOCK_CONST_METHOD3(lrem,
       int(const char *key, int count, const char *element));
-  MOCK_METHOD2(lpop,
+  MOCK_CONST_METHOD2(lpop,
       int(const char *key, char **val));
-  MOCK_METHOD2(rpop,
+  MOCK_CONST_METHOD2(rpop,
       int(const char *key, char **val));
-  MOCK_METHOD2(sadd,
+  MOCK_CONST_METHOD2(sadd,
       int(const char *key, const char *member));
-  MOCK_METHOD2(srem,
+  MOCK_CONST_METHOD2(srem,
       int(const char *key, const char *member));
-  MOCK_METHOD2(spop,
+  MOCK_CONST_METHOD2(spop,
       int(const char *key, char **member));
-  MOCK_METHOD3(smove,
+  MOCK_CONST_METHOD3(smove,
       int(const char *sourcekey, const char *destkey, const char *member));
-  MOCK_METHOD1(scard,
+  MOCK_CONST_METHOD1(scard,
       int(const char *key));
-  MOCK_METHOD2(sismember,
+  MOCK_CONST_METHOD2(sismember,
       int(const char *key, const char *member));
-  MOCK_METHOD3(sinter,
+  MOCK_CONST_METHOD3(sinter,
       int(int keyc, const char **keyv, char ***members));
-  MOCK_METHOD3(sinterstore,
+  MOCK_CONST_METHOD3(sinterstore,
       int(const char *destkey, int keyc, const char **keyv));
-  MOCK_METHOD3(sunion,
+  MOCK_CONST_METHOD3(sunion,
       int(int keyc, const char **keyv, char ***members));
-  MOCK_METHOD3(sunionstore,
+  MOCK_CONST_METHOD3(sunionstore,
       int(const char *destkey, int keyc, const char **keyv));
-  MOCK_METHOD3(sdiff,
+  MOCK_CONST_METHOD3(sdiff,
       int(int keyc, const char **keyv, char ***members));
-  MOCK_METHOD3(sdiffstore,
+  MOCK_CONST_METHOD3(sdiffstore,
       int(const char *destkey, int keyc, const char **keyv));
-  MOCK_METHOD2(smembers,
+  MOCK_CONST_METHOD2(smembers,
       int(const char *key, char ***members));
-  MOCK_METHOD3(zadd,
+  MOCK_CONST_METHOD3(zadd,
       int(const char *key, double score, const char *member));
-  MOCK_METHOD2(zrem,
+  MOCK_CONST_METHOD2(zrem,
       int(const char *key, const char *member));
-  MOCK_METHOD4(zincrby,
+  MOCK_CONST_METHOD4(zincrby,
       int(const char *key, double incr_score, const char *member, double *new_score));
-  MOCK_METHOD2(zrank,
+  MOCK_CONST_METHOD2(zrank,
       int(const char *key, const char *member));
-  MOCK_METHOD2(zrevrank,
+  MOCK_CONST_METHOD2(zrevrank,
       int(const char *key, const char *member));
-  MOCK_METHOD4(zrange,
+  MOCK_CONST_METHOD4(zrange,
       int(const char *key, int start, int end, char ***elementv));
-  MOCK_METHOD4(zrevrange,
+  MOCK_CONST_METHOD4(zrevrange,
       int(const char *key, int start, int end, char ***elementv));
-  MOCK_METHOD1(zcard,
+  MOCK_CONST_METHOD1(zcard,
       int(const char *key));
-  MOCK_METHOD3(zscore,
+  MOCK_CONST_METHOD3(zscore,
       int(const char *key, const char *member, double *score));
-  MOCK_METHOD3(zremrangebyscore,
+  MOCK_CONST_METHOD3(zremrangebyscore,
       int(const char *key, double min, double max));
-  MOCK_METHOD3(zremrangebyrank,
+  MOCK_CONST_METHOD3(zremrangebyrank,
       int(const char *key, int start, int end));
-  MOCK_METHOD2(sort,
+  MOCK_CONST_METHOD2(sort,
       int(const char *query, char ***elementv));
-  MOCK_METHOD1(subscribe,
+  MOCK_CONST_METHOD1(subscribe,
       int(const char *channel));
-  MOCK_METHOD1(unsubscribe,
+  MOCK_CONST_METHOD1(unsubscribe,
       int(const char *channel));
-  MOCK_METHOD1(psubscribe,
+  MOCK_CONST_METHOD1(psubscribe,
       int(const char *pattern));
-  MOCK_METHOD1(punsubscribe,
+  MOCK_CONST_METHOD1(punsubscribe,
       int(const char *pattern));
-  MOCK_METHOD2(publish,
+  MOCK_CONST_METHOD2(publish,
       int(const char *channel, const char *message));
-  MOCK_METHOD3(listen,
+  MOCK_CONST_METHOD3(listen,
       int(char **pattern, char **channel, char **message));
-  MOCK_METHOD0(save,
+  MOCK_CONST_METHOD0(save,
       int());
-  MOCK_METHOD0(bgsave,
+  MOCK_CONST_METHOD0(bgsave,
       int());
-  MOCK_METHOD0(lastsave,
+  MOCK_CONST_METHOD0(lastsave,
       int());
-  MOCK_METHOD0(shutdown,
+  MOCK_CONST_METHOD0(shutdown,
       int());
-  MOCK_METHOD0(bgrewriteaof,
+  MOCK_CONST_METHOD0(bgrewriteaof,
       int());
-  MOCK_METHOD0(monitor,
+  MOCK_CONST_METHOD0(monitor,
       int());
-  MOCK_METHOD2(slaveof,
+  MOCK_CONST_METHOD2(slaveof,
       int(const char *host, int port));
 };
 

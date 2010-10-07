@@ -15,9 +15,9 @@ namespace rrns_db {
 
         virtual ~IRedisConsumer() {}
 
-        virtual bool CanConsume(ICredis *rh, const std::string &dataKey) const = 0;
+        virtual bool CanConsume(const ICredis *rh, const std::string &dataKey) const = 0;
 
-        virtual std::vector<double> GetRandoms(ICredis *rh,  const std::string &dataKey, int count) const = 0;
+        virtual std::vector<double> GetRandoms(const ICredis *rh,  const std::string &dataKey, int count) const = 0;
 
     };
 

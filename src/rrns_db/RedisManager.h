@@ -7,9 +7,10 @@ namespace rrns_db {
 
     //forwards
     class ICredis;
-    class IRedisConsumer;
     class IRedisConnector;
+    class IRedisConsumer;
     class IKeyParser;
+    class IKeyGenerator;
 
     class RedisManager : public IRedisManager
     {
@@ -17,7 +18,11 @@ namespace rrns_db {
     public:
 
         //construct/destruct
-        RedisManager(ICredis *credis, IRedisConsumer *consumer, IRedisConnector *connector, IKeyParser *parser);
+        RedisManager(ICredis *credis,
+                     IRedisConnector *connector,
+                     const IRedisConsumer *consumer,
+                     const IKeyParser *parser,
+                     const IKeyGenerator *dataKeyGenerator);
 
         //Connect/disconnect with db
         virtual void Connect(const std::string &host, int port, int timeout);
@@ -34,11 +39,13 @@ namespace rrns_db {
     private:
 
         //Redis stuff
-        ICredis             *cred;
-        IRedisConsumer     *cons;
-        IRedisConnector    *conn;
-        IKeyParser          *pars;
-        std::string         id;
+        std::string      id_;
+        ICredis         *credis_;
+        IRedisConnector *connector_;
+
+        const IRedisConsumer    *consumer_;
+        const IKeyParser        *parser_;
+        const IKeyGenerator     *dataKeyGenerator_;
 
     private:
         //don't want these

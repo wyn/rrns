@@ -13,9 +13,9 @@ namespace rrns_db
         {
         public:
 
-            MOCK_CONST_METHOD2( CanConsume, bool(ICredis *rh, const std::string &dataKey) );
+            MOCK_CONST_METHOD2( CanConsume, bool(const ICredis *rh, const std::string &dataKey) );
 
-            MOCK_CONST_METHOD3( GetRandoms, std::vector<double>(ICredis *rh,  const std::string &dataKey, int count) );
+            MOCK_CONST_METHOD3( GetRandoms, std::vector<double>(const ICredis *rh,  const std::string &dataKey, int count) );
 
         };
 
