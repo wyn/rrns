@@ -1,10 +1,10 @@
 #include "MockICredis.h"
-#include "MockIConsumer.h"
+#include "MockIRedisConsumer.h"
 #include "MockIRedisConnector.h"
 #include "MockIKey.h"
 #include "MockIKeyParser.h"
 #include "MockIKeyGenerator.h"
-#include "RedisManager.h"
+#include "RandomConsumer.h"
 #include "Key.h"
 
 #include "gmock/gmock.h"
@@ -18,7 +18,7 @@ using ::testing::NotNull;
 using ::testing::DoAll;
 
 using ::rrns_db::test::MockICredis;
-using ::rrns_db::test::MockIConsumer;
+using ::rrns_db::test::MockIRedisConsumer;
 using ::rrns_db::test::MockIRedisConnector;
 using ::rrns_db::test::MockIKey;
 using ::rrns_db::test::MockIKeyParser;
@@ -26,18 +26,18 @@ using ::rrns_db::test::MockIKeyGenerator;
 
 using ::rrns_db::IKey;
 using ::rrns_db::Key;
-using ::rrns_db::RedisManager;
+using ::rrns_db::RandomConsumer;
 
 namespace {
 
-// The fixture for testing class RedisManager.
-class RedisManagerTest : public ::testing::Test {
+// The fixture for testing class RandomConsumer.
+class RandomConsumerTest : public ::testing::Test {
 
  protected:
   // You can remove any or all of the following functions if its body
   // is empty.
 
-  RedisManagerTest()
+  RandomConsumerTest()
       : host("localhost")
       , port(6379)
       , timeout(2000)
@@ -48,7 +48,7 @@ class RedisManagerTest : public ::testing::Test {
 
   }
 
-  virtual ~RedisManagerTest() {
+  virtual ~RandomConsumerTest() {
     // You can do clean-up work that doesn't throw exceptions here.
   }
 
@@ -75,10 +75,10 @@ class RedisManagerTest : public ::testing::Test {
 
 };
 
-TEST_F(RedisManagerTest, CanConnect) {
+TEST_F(RandomConsumerTest, CanConnect) {
 
     MockICredis cred;
-    MockIConsumer cons;
+    MockIRedisConsumer cons;
     MockIRedisConnector conn;
     MockIKeyParser p;
     MockIKeyGenerator gen;
@@ -89,15 +89,15 @@ TEST_F(RedisManagerTest, CanConnect) {
     EXPECT_CALL(cred, SetConnector(&conn))
             .Times(1);
 
-    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    RandomConsumer rm(&cred, &conn, &cons, &p, &gen);
     rm.Connect(host, port, timeout);
 
 }
 
-TEST_F(RedisManagerTest, CanDisconnect) {
+TEST_F(RandomConsumerTest, CanDisconnect) {
 
     MockICredis cred;
-    MockIConsumer cons;
+    MockIRedisConsumer cons;
     MockIRedisConnector conn;
     MockIKeyParser p;
     MockIKeyGenerator gen;
@@ -108,7 +108,7 @@ TEST_F(RedisManagerTest, CanDisconnect) {
     EXPECT_CALL(cred, ClearConnector())
             .Times(1);
 
-    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    RandomConsumer rm(&cred, &conn, &cons, &p, &gen);
     rm.Disconnect();
 }
 
@@ -118,10 +118,10 @@ ACTION_P(SetArg1, c){
     *arg1 = c;
 };
 
-TEST_F(RedisManagerTest, CanRegister) {
+TEST_F(RandomConsumerTest, CanRegister) {
 
     MockICredis cred;
-    MockIConsumer cons;
+    MockIRedisConsumer cons;
     MockIRedisConnector conn;
     MockIKeyParser p;
     MockIKeyGenerator gen;
@@ -167,15 +167,15 @@ TEST_F(RedisManagerTest, CanRegister) {
     EXPECT_CALL(cred, del(_))
             .WillOnce(Return(0));
 
-    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    RandomConsumer rm(&cred, &conn, &cons, &p, &gen);
     rm.Register(major, minor);
 
 }
 
-TEST_F(RedisManagerTest, CanNotRegister_InvalidHandle) {
+TEST_F(RandomConsumerTest, CanNotRegister_InvalidHandle) {
 
     MockICredis cred;
-    MockIConsumer cons;
+    MockIRedisConsumer cons;
     MockIRedisConnector conn;
     MockIKeyParser p;
     MockIKeyGenerator gen;
@@ -205,15 +205,15 @@ TEST_F(RedisManagerTest, CanNotRegister_InvalidHandle) {
     EXPECT_CALL(cred, del(_))
             .Times(0);
 
-    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    RandomConsumer rm(&cred, &conn, &cons, &p, &gen);
     rm.Register(major, minor);
 
 }
 
-TEST_F(RedisManagerTest, CanNotRegister_CannotAddTmpKey) {
+TEST_F(RandomConsumerTest, CanNotRegister_CannotAddTmpKey) {
 
     MockICredis cred;
-    MockIConsumer cons;
+    MockIRedisConsumer cons;
     MockIRedisConnector conn;
     MockIKeyParser p;
     MockIKeyGenerator gen;
@@ -246,15 +246,15 @@ TEST_F(RedisManagerTest, CanNotRegister_CannotAddTmpKey) {
     EXPECT_CALL(cred, del(_))
             .Times(1);
 
-    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    RandomConsumer rm(&cred, &conn, &cons, &p, &gen);
     rm.Register(major, minor);
 
 }
 
-TEST_F(RedisManagerTest, CanNotRegister_CannotIntersectSets) {
+TEST_F(RandomConsumerTest, CanNotRegister_CannotIntersectSets) {
 
     MockICredis cred;
-    MockIConsumer cons;
+    MockIRedisConsumer cons;
     MockIRedisConnector conn;
     MockIKeyParser p;
     MockIKeyGenerator gen;
@@ -288,15 +288,15 @@ TEST_F(RedisManagerTest, CanNotRegister_CannotIntersectSets) {
     EXPECT_CALL(cred, del(_))
             .Times(1);
 
-    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    RandomConsumer rm(&cred, &conn, &cons, &p, &gen);
     rm.Register(major, minor);
 
 }
 
-TEST_F(RedisManagerTest, CanNotRegister_CannotPopFromTempSet) {
+TEST_F(RandomConsumerTest, CanNotRegister_CannotPopFromTempSet) {
 
     MockICredis cred;
-    MockIConsumer cons;
+    MockIRedisConsumer cons;
     MockIRedisConnector conn;
     MockIKeyParser p;
     MockIKeyGenerator gen;
@@ -329,15 +329,15 @@ TEST_F(RedisManagerTest, CanNotRegister_CannotPopFromTempSet) {
     EXPECT_CALL(cred, del(_))
             .Times(1);
 
-    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    RandomConsumer rm(&cred, &conn, &cons, &p, &gen);
     rm.Register(major, minor);
 
 }
 
-TEST_F(RedisManagerTest, CanNotRegister_CannotCreateIdKey) {
+TEST_F(RandomConsumerTest, CanNotRegister_CannotCreateIdKey) {
 
     MockICredis cred;
-    MockIConsumer cons;
+    MockIRedisConsumer cons;
     MockIRedisConnector conn;
     MockIKeyParser p;
     MockIKeyGenerator gen;
@@ -374,15 +374,15 @@ TEST_F(RedisManagerTest, CanNotRegister_CannotCreateIdKey) {
     EXPECT_CALL(cred, del(_))
             .Times(1);
 
-    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    RandomConsumer rm(&cred, &conn, &cons, &p, &gen);
     rm.Register(major, minor);
 
 }
 
-TEST_F(RedisManagerTest, CanNotRegister_CannotSerialiseNewIdKey) {
+TEST_F(RandomConsumerTest, CanNotRegister_CannotSerialiseNewIdKey) {
 
     MockICredis cred;
-    MockIConsumer cons;
+    MockIRedisConsumer cons;
     MockIRedisConnector conn;
     MockIKeyParser p;
     MockIKeyGenerator gen;
@@ -419,15 +419,15 @@ TEST_F(RedisManagerTest, CanNotRegister_CannotSerialiseNewIdKey) {
     EXPECT_CALL(cred, del(_))
             .Times(1);
 
-    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    RandomConsumer rm(&cred, &conn, &cons, &p, &gen);
     rm.Register(major, minor);
 
 }
 
-TEST_F(RedisManagerTest, CanUnregister) {
+TEST_F(RandomConsumerTest, CanUnregister) {
 
     MockICredis cred;
-    MockIConsumer cons;
+    MockIRedisConsumer cons;
     MockIRedisConnector conn;
     MockIKeyParser p;
     MockIKeyGenerator gen;
@@ -436,15 +436,15 @@ TEST_F(RedisManagerTest, CanUnregister) {
     EXPECT_CALL(conn, Disconnect())
             .Times(0);
 
-    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    RandomConsumer rm(&cred, &conn, &cons, &p, &gen);
     rm.Unregister();
 
 }
 
-TEST_F(RedisManagerTest, TestCanConsume) {
+TEST_F(RandomConsumerTest, TestCanConsume) {
 
     MockICredis cred;
-    MockIConsumer cons;
+    MockIRedisConsumer cons;
     MockIRedisConnector conn;
     MockIKeyParser p;
     MockIKeyGenerator gen;
@@ -452,15 +452,15 @@ TEST_F(RedisManagerTest, TestCanConsume) {
     EXPECT_CALL(cons, CanConsume(&cred, _))
             .Times(1);
 
-    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    RandomConsumer rm(&cred, &conn, &cons, &p, &gen);
     rm.CanConsume();
 
 }
 
-TEST_F(RedisManagerTest, TestCount) {
+TEST_F(RandomConsumerTest, TestCount) {
 
     MockICredis cred;
-    MockIConsumer cons;
+    MockIRedisConsumer cons;
     MockIRedisConnector conn;
     MockIKeyParser p;
     MockIKeyGenerator gen;
@@ -468,15 +468,15 @@ TEST_F(RedisManagerTest, TestCount) {
     EXPECT_CALL(cons, Count(&cred, _))
             .Times(1);
 
-    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    RandomConsumer rm(&cred, &conn, &cons, &p, &gen);
     rm.Count();
 
 }
 
-TEST_F(RedisManagerTest, TestGetData) {
+TEST_F(RandomConsumerTest, TestGetData) {
 
     MockICredis cred;
-    MockIConsumer cons;
+    MockIRedisConsumer cons;
     MockIRedisConnector conn;
     MockIKeyParser p;
     MockIKeyGenerator gen;
@@ -487,7 +487,7 @@ TEST_F(RedisManagerTest, TestGetData) {
     EXPECT_CALL(cons, GetData(&cred, _, howMany))
             .WillOnce(Return(rs));
 
-    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    RandomConsumer rm(&cred, &conn, &cons, &p, &gen);
     rm.GetRandoms(howMany);
 
 }

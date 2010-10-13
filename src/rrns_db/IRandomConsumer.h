@@ -1,17 +1,17 @@
-#ifndef IREDISMANAGER_H
-#define IREDISMANAGER_H
+#ifndef IRANDOMCONSUMER_H
+#define IRANDOMCONSUMER_H
 
 #include <string>
 #include <vector>
 
 namespace rrns_db {
 
-    class IRedisManager
+    class IRandomConsumer
     {
 
     public:
 
-        virtual ~IRedisManager() {} //for mocking
+        virtual ~IRandomConsumer() {} //for mocking
 
         //Connect/disconnect with db
         virtual void Connect(const std::string &host, int port, int timeout) = 0;
@@ -30,4 +30,4 @@ namespace rrns_db {
 
 } //namespace rrns_db
 
-#endif // IREDISMANAGER_H
+#endif // IRANDOMCONSUMER_H

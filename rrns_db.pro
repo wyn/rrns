@@ -45,11 +45,11 @@ DEPENDPATH += . \
 
 #actual header/source files to build
 HEADERS += \
-    src/rrns_db/IConsumer.h \
+    src/rrns_db/IRedisConsumer.h \
     src/rrns_db/IRedisConnector.h \
-    src/rrns_db/IRedisManager.h \
-    src/rrns_db/RedisManager.h \
-    src/rrns_db/Consumer.h \
+    src/rrns_db/IRandomConsumer.h \
+    src/rrns_db/RandomConsumer.h \
+    src/rrns_db/RedisConsumer.h \
     src/rrns_db/RedisDB_global.h \
     src/rrns_db/RedisDB_Wrapper.h \
     src/rrns_db/IKeyParser.h \
@@ -70,8 +70,8 @@ HEADERS += \
     src/rrns_db/KeyParser.h
 
 SOURCES += \
-    src/rrns_db/RedisManager.cpp \
-    src/rrns_db/Consumer.cpp \
+    src/rrns_db/RandomConsumer.cpp \
+    src/rrns_db/RedisConsumer.cpp \
     src/rrns_db/RedisDB_Wrapper.cpp \
     src/rrns_db/CredisAdapter.cpp \
     src/rrns_db/RedisConnector.cpp \
@@ -92,8 +92,8 @@ test{
     HEADERS += \
         src/rrns_db/ut/MockICredis.h \
         src/rrns_db/ut/MockIRedisConnector.h \
-        src/rrns_db/ut/MockIConsumer.h \
-        src/rrns_db/ut/MockIRedisManager.h \
+        src/rrns_db/ut/MockIRedisConsumer.h \
+        src/rrns_db/ut/MockIRandomConsumer.h \
         src/rrns_db/ut/MockIKeyParser.h \
         src/rrns_db/ut/MockIKey.h \
         src/rrns_db/ut/MockIKeyGenerator.h \
@@ -103,8 +103,8 @@ test{
 
 
     SOURCES += \
-        src/rrns_db/ut/Consumer_UT.cpp \
-        src/rrns_db/ut/RedisManager_UT.cpp \
+        src/rrns_db/ut/RedisConsumer_UT.cpp \
+        src/rrns_db/ut/RandomConsumer_UT.cpp \
         src/rrns_db/ut/Main_UT.cpp \
         \
         src/third_party/gmock/gmock-gtest-all.cc \

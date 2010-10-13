@@ -1,4 +1,4 @@
-#include "Consumer.h"
+#include "RedisConsumer.h"
 #include "glog/logging.h"
 #include "ICredis.h"
 #include "IRedisConnector.h"
@@ -7,14 +7,14 @@
 
 using namespace rrns_db;
 
-const int Consumer::default_max = 100;
-const int Consumer::default_max_factor = 3;
+const int RedisConsumer::default_max = 100;
+const int RedisConsumer::default_max_factor = 3;
 
-Consumer::Consumer()
+RedisConsumer::RedisConsumer()
 {
 }
 
-bool Consumer::CanConsume(const ICredis *rh, const std::string &dataKey) const
+bool RedisConsumer::CanConsume(const ICredis *rh, const std::string &dataKey) const
 {
     CHECK_NOTNULL(rh);
     DLOG(INFO) << "CanConsume";
@@ -22,7 +22,7 @@ bool Consumer::CanConsume(const ICredis *rh, const std::string &dataKey) const
     return (0 == rh->exists(dataKey.c_str()));
 }
 
-int Consumer::Count(const ICredis *rh, const std::string &dataKey) const
+int RedisConsumer::Count(const ICredis *rh, const std::string &dataKey) const
 {
     CHECK_NOTNULL(rh);
     DLOG(INFO) << "Count";
@@ -30,7 +30,7 @@ int Consumer::Count(const ICredis *rh, const std::string &dataKey) const
     return rh->llen(dataKey.c_str());
 }
 
-std::vector<double> Consumer::GetData(const ICredis *rh, const std::string &dataKey, int count) const
+std::vector<double> RedisConsumer::GetData(const ICredis *rh, const std::string &dataKey, int count) const
 {
     CHECK_NOTNULL(rh);
     DLOG(INFO) << "GetRandoms";

@@ -1,7 +1,7 @@
-#ifndef MOCKIREDISMANAGER_H
-#define MOCKIREDISMANAGER_H
+#ifndef MOCKIRANDOMCONSUMER_H
+#define MOCKIRANDOMCONSUMER_H
 
-#include "IRedisManager.h"
+#include "IRandomConsumer.h"
 #include "gmock/gmock.h"
 
 namespace rrns_db
@@ -9,7 +9,7 @@ namespace rrns_db
     namespace test
     {
 
-        class MockIRedisManager : public IRedisManager
+        class MockIRandomConsumer : public IRandomConsumer
         {
 
         public:
@@ -31,4 +31,4 @@ namespace rrns_db
 
 } //namespace rrns_db
 
-#endif // MOCKIREDISMANAGER_H
+#endif // MOCKIRANDOMCONSUMER_H

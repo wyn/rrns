@@ -1,26 +1,26 @@
-#ifndef REDISMANAGER_H
-#define REDISMANAGER_H
+#ifndef RANDOMCONSUMER_H
+#define RANDOMCONSUMER_H
 
-#include "IRedisManager.h"
+#include "IRandomConsumer.h"
 
 namespace rrns_db {
 
     //forwards
     class ICredis;
     class IRedisConnector;
-    class IConsumer;
+    class IRedisConsumer;
     class IKeyParser;
     class IKeyGenerator;
 
-    class RedisManager : public IRedisManager
+    class RandomConsumer : public IRandomConsumer
     {
 
     public:
 
         //construct/destruct
-        RedisManager(ICredis *credis,
+        RandomConsumer(ICredis *credis,
                      IRedisConnector *connector,
-                     const IConsumer *consumer,
+                     const IRedisConsumer *consumer,
                      const IKeyParser *parser,
                      const IKeyGenerator *dataKeyGenerator);
 
@@ -42,21 +42,21 @@ namespace rrns_db {
         static const std::string unknown_id;
 
         //Redis stuff
-        std::string      id_;
-        ICredis         *credis_;
+        std::string id_;
+        ICredis *credis_;
         IRedisConnector *connector_;
 
-        const IConsumer    *consumer_;
-        const IKeyParser        *parser_;
-        const IKeyGenerator     *dataKeyGenerator_;
+        const IRedisConsumer *consumer_;
+        const IKeyParser *parser_;
+        const IKeyGenerator *dataKeyGenerator_;
 
     private:
         //don't want these
-        RedisManager(const RedisManager&);
-        RedisManager& operator=(const RedisManager&);
+        RandomConsumer(const RandomConsumer&);
+        RandomConsumer& operator=(const RandomConsumer&);
 
     };
 
 } //namespace rrns_db
 
-#endif // REDISMANAGER_H
+#endif // RANDOMCONSUMER_H

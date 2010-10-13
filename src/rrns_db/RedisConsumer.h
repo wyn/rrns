@@ -1,17 +1,17 @@
-#ifndef CONSUMER_H
-#define CONSUMER_H
+#ifndef REDISCONSUMER_H
+#define REDISCONSUMER_H
 
-#include "IConsumer.h"
+#include "IRedisConsumer.h"
 
 namespace rrns_db
 {
 
-    class Consumer : public IConsumer
+    class RedisConsumer : public IRedisConsumer
     {
 
     public:
 
-        Consumer();
+        RedisConsumer();
 
         virtual bool CanConsume(const ICredis *rh, const std::string &dataKey) const;
 
@@ -25,11 +25,11 @@ namespace rrns_db
 
     private:
         //don't want these
-        Consumer(const Consumer&);
-        Consumer& operator=(const Consumer&);
+        RedisConsumer(const RedisConsumer&);
+        RedisConsumer& operator=(const RedisConsumer&);
 
     };
 
 } //rrns_db
 
-#endif // CONSUMER_H
+#endif // REDISCONSUMER_H

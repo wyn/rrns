@@ -1,5 +1,5 @@
-#ifndef ICONSUMER_H
-#define ICONSUMER_H
+#ifndef IREDISCONSUMER_H
+#define IREDISCONSUMER_H
 
 #include <string>
 #include <vector>
@@ -9,11 +9,11 @@ namespace rrns_db {
 
     class ICredis;
 
-    class IConsumer
+    class IRedisConsumer
     {
     public:
 
-        virtual ~IConsumer() {}
+        virtual ~IRedisConsumer() {}
 
         virtual bool CanConsume(const ICredis *rh, const std::string &dataKey) const = 0;
 
@@ -25,4 +25,4 @@ namespace rrns_db {
 
 } //namespace rrns_db
 
-#endif // ICONSUMER_H
+#endif // IREDISCONSUMER_H

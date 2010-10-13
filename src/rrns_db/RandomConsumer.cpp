@@ -1,6 +1,6 @@
-#include "RedisManager.h"
+#include "RandomConsumer.h"
 #include "ICredis.h"
-#include "IConsumer.h"
+#include "IRedisConsumer.h"
 #include "IRedisConnector.h"
 #include "IKeyParser.h"
 #include "IKey.h"
@@ -17,11 +17,11 @@ static std::string MakeTemporaryKeyString(const std::string &major, const std::s
     return ("tmp:" + major + ":intersect:" + minor);
 }
 
-const std::string RedisManager::unknown_id("unknown");
+const std::string RandomConsumer::unknown_id("unknown");
 
-RedisManager::RedisManager(ICredis *credis,
+RandomConsumer::RandomConsumer(ICredis *credis,
                            IRedisConnector *connector,
-                           const IConsumer *consumer,
+                           const IRedisConsumer *consumer,
                            const IKeyParser *parser,
                            const IKeyGenerator *dataKeyGenerator)
     : id_(unknown_id)
@@ -31,17 +31,17 @@ RedisManager::RedisManager(ICredis *credis,
     , parser_(CHECK_NOTNULL(parser))
     , dataKeyGenerator_(CHECK_NOTNULL(dataKeyGenerator))
 {
-    DLOG(INFO) << "RedisManager(), reset to initial";
+    DLOG(INFO) << "RandomConsumer(), reset to initial";
 }
 
-void RedisManager::Connect(const std::string &host, int port, int timeout)
+void RandomConsumer::Connect(const std::string &host, int port, int timeout)
 {
     DLOG(INFO) << "Trying to get REDIS handle on " << host << ", " << port;
     connector_->Connect(host, port, timeout);
     credis_->SetConnector(connector_);
 }
 
-void RedisManager::Disconnect()
+void RandomConsumer::Disconnect()
 {
     DLOG(INFO) << "Disconnecting";
     credis_->ClearConnector();
@@ -49,7 +49,7 @@ void RedisManager::Disconnect()
 }
 
 //Register/unregister with a RN data stream
-void RedisManager::Register(const std::string &majorKey, const std::string &minorKey)
+void RandomConsumer::Register(const std::string &majorKey, const std::string &minorKey)
 {
     DLOG(INFO) << "Registering " << majorKey << ", " << minorKey;
 
@@ -100,23 +100,23 @@ void RedisManager::Register(const std::string &majorKey, const std::string &mino
     }
 }
 
-void RedisManager::Unregister()
+void RandomConsumer::Unregister()
 {
     DLOG(INFO) << "Unregistering, reset to initial";
     id_ = unknown_id;
 }
 
-bool RedisManager::CanConsume() const
+bool RandomConsumer::CanConsume() const
 {    
     return consumer_->CanConsume(credis_, id_);
 }
 
-int RedisManager::Count() const
+int RandomConsumer::Count() const
 {
     return consumer_->Count(credis_, id_);
 }
 
-std::vector<double> RedisManager::GetRandoms(int howMany) const
+std::vector<double> RandomConsumer::GetRandoms(int howMany) const
 {
     return consumer_->GetData(credis_, id_, howMany);
 }
