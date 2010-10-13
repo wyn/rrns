@@ -457,7 +457,23 @@ TEST_F(RedisManagerTest, TestCanConsume) {
 
 }
 
-TEST_F(RedisManagerTest, TestGetRandoms) {
+TEST_F(RedisManagerTest, TestCount) {
+
+    MockICredis cred;
+    MockIConsumer cons;
+    MockIRedisConnector conn;
+    MockIKeyParser p;
+    MockIKeyGenerator gen;
+
+    EXPECT_CALL(cons, Count(&cred, _))
+            .Times(1);
+
+    RedisManager rm(&cred, &conn, &cons, &p, &gen);
+    rm.Count();
+
+}
+
+TEST_F(RedisManagerTest, TestGetData) {
 
     MockICredis cred;
     MockIConsumer cons;

@@ -22,16 +22,18 @@ bool Consumer::CanConsume(const ICredis *rh, const std::string &dataKey) const
     return (0 == rh->exists(dataKey.c_str()));
 }
 
+int Consumer::Count(const ICredis *rh, const std::string &dataKey) const
+{
+    CHECK_NOTNULL(rh);
+    DLOG(INFO) << "Count";
+
+    return rh->llen(dataKey.c_str());
+}
+
 std::vector<double> Consumer::GetData(const ICredis *rh, const std::string &dataKey, int count) const
 {
     CHECK_NOTNULL(rh);
     DLOG(INFO) << "GetRandoms";
-
-    if (!CanConsume(rh, dataKey))
-    {
-        DLOG(ERROR) << "Cannot consume data for " << dataKey;
-        return std::vector<double>();
-    }
 
     //get count x rands for id member
     std::vector<double> l;

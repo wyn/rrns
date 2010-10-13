@@ -70,6 +70,17 @@ TEST_F(ConsumerTest, TestCannotConsume) {
     ASSERT_FALSE(r.CanConsume(&mock, key));
 }
 
+TEST_F(ConsumerTest, TestCount) {
+
+    MockICredis mock;
+
+    EXPECT_CALL(mock, llen(key.c_str()))
+            .Times(1);
+
+    Consumer r;
+    r.Count(&mock, key);
+}
+
 //templates seem to go crazy and not compile with things like SetArgumentPointee
 //so using ACTION* macro
 ACTION_P(SetArg1, c){
@@ -80,9 +91,6 @@ TEST_F(ConsumerTest, TestGetData) {
 
     MockICredis mock;
     size_t howMany = 10;
-
-    EXPECT_CALL(mock, exists(key.c_str()))
-            .WillOnce(Return(0));
 
     char c[2] = { '1', '2' };
     ON_CALL(mock, lpop(key.c_str(), NotNull()))
@@ -109,9 +117,6 @@ TEST_F(ConsumerTest, TestGetData_LotsMoreThanDefaultMax) {
     MockICredis mock;
     size_t howMany = 200; //needs to be bigger than Consumer.cpp::default_max = 100
 
-    EXPECT_CALL(mock, exists(key.c_str()))
-            .WillOnce(Return(0));
-
     char c[2] = { '1', '2' };
     ON_CALL(mock, lpop(key.c_str(), NotNull()))
             .WillByDefault(DoAll(
@@ -132,28 +137,9 @@ TEST_F(ConsumerTest, TestGetData_LotsMoreThanDefaultMax) {
 
 }
 
-TEST_F(ConsumerTest, TestGetData_CannotConsume) {
-
-    MockICredis mock;
-
-    EXPECT_CALL(mock, exists(key.c_str()))
-            .WillOnce(Return(-1));
-
-    EXPECT_CALL(mock, lpop(_, _))
-            .Times(0);
-
-    Consumer r;
-    std::vector<double> l(r.GetData(&mock, key, 10));
-
-    ASSERT_TRUE(l.empty());
-}
-
 TEST_F(ConsumerTest, TestGetData_CannotPop) {
 
     MockICredis mock;
-
-    EXPECT_CALL(mock, exists(key.c_str()))
-            .WillOnce(Return(0));
 
     char c[2] = { '1', '2' };
     ON_CALL(mock, lpop(key.c_str(), NotNull()))

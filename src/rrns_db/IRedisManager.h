@@ -23,6 +23,7 @@ namespace rrns_db {
 
         //consuming data
         virtual bool CanConsume() const = 0;
+        virtual int Count() const = 0;
         virtual std::vector<double> GetRandoms(int howMany) const = 0;
 
     };

@@ -15,6 +15,8 @@ namespace rrns_db
 
         virtual bool CanConsume(const ICredis *rh, const std::string &dataKey) const;
 
+        virtual int Count(const ICredis *rh, const std::string &dataKey) const;
+
         virtual std::vector<double> GetData(const ICredis *rh,  const std::string &dataKey, int count) const;
 
     private:

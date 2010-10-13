@@ -34,6 +34,7 @@ namespace rrns_db {
 
         //consuming data
         virtual bool CanConsume() const;
+        virtual int Count() const;
         virtual std::vector<double> GetRandoms(int howMany) const;
 
     private:

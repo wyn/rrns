@@ -111,6 +111,11 @@ bool RedisManager::CanConsume() const
     return consumer_->CanConsume(credis_, id_);
 }
 
+int RedisManager::Count() const
+{
+    return consumer_->Count(credis_, id_);
+}
+
 std::vector<double> RedisManager::GetRandoms(int howMany) const
 {
     return consumer_->GetData(credis_, id_, howMany);
