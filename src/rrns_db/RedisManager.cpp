@@ -1,6 +1,6 @@
 #include "RedisManager.h"
 #include "ICredis.h"
-#include "IRedisConsumer.h"
+#include "IConsumer.h"
 #include "IRedisConnector.h"
 #include "IKeyParser.h"
 #include "IKey.h"
@@ -21,7 +21,7 @@ const std::string RedisManager::unknown_id("unknown");
 
 RedisManager::RedisManager(ICredis *credis,
                            IRedisConnector *connector,
-                           const IRedisConsumer *consumer,
+                           const IConsumer *consumer,
                            const IKeyParser *parser,
                            const IKeyGenerator *dataKeyGenerator)
     : id_(unknown_id)
@@ -113,5 +113,5 @@ bool RedisManager::CanConsume() const
 
 std::vector<double> RedisManager::GetRandoms(int howMany) const
 {
-    return consumer_->GetRandoms(credis_, id_, howMany);
+    return consumer_->GetData(credis_, id_, howMany);
 }

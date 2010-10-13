@@ -8,7 +8,7 @@ namespace rrns_db {
     //forwards
     class ICredis;
     class IRedisConnector;
-    class IRedisConsumer;
+    class IConsumer;
     class IKeyParser;
     class IKeyGenerator;
 
@@ -20,7 +20,7 @@ namespace rrns_db {
         //construct/destruct
         RedisManager(ICredis *credis,
                      IRedisConnector *connector,
-                     const IRedisConsumer *consumer,
+                     const IConsumer *consumer,
                      const IKeyParser *parser,
                      const IKeyGenerator *dataKeyGenerator);
 
@@ -45,7 +45,7 @@ namespace rrns_db {
         ICredis         *credis_;
         IRedisConnector *connector_;
 
-        const IRedisConsumer    *consumer_;
+        const IConsumer    *consumer_;
         const IKeyParser        *parser_;
         const IKeyGenerator     *dataKeyGenerator_;
 

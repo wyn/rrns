@@ -1,4 +1,4 @@
-#include "RedisConsumer.h"
+#include "Consumer.h"
 #include "MockICredis.h"
 
 #include "gmock/gmock.h"
@@ -11,23 +11,23 @@ using ::testing::DoAll;
 using ::testing::AtLeast;
 
 using ::rrns_db::test::MockICredis;
-using ::rrns_db::RedisConsumer;
+using ::rrns_db::Consumer;
 
 namespace {
 
-// The fixture for testing class RedisConsumer.
-class RedisConsumerTest : public ::testing::Test {
+// The fixture for testing class Consumer.
+class ConsumerTest : public ::testing::Test {
  protected:
   // You can remove any or all of the following functions if its body
   // is empty.
 
-  RedisConsumerTest()
+  ConsumerTest()
       : key("key")
   {
     // You can do set-up work for each test here.
   }
 
-  virtual ~RedisConsumerTest() {
+  virtual ~ConsumerTest() {
     // You can do clean-up work that doesn't throw exceptions here.
   }
 
@@ -48,25 +48,25 @@ class RedisConsumerTest : public ::testing::Test {
   const std::string key;
 };
 
-TEST_F(RedisConsumerTest, TestCanConsume) {
+TEST_F(ConsumerTest, TestCanConsume) {
 
     MockICredis mock;
 
     EXPECT_CALL(mock, exists(key.c_str()))
             .WillOnce(Return(0));
 
-    RedisConsumer r;
+    Consumer r;
     ASSERT_TRUE(r.CanConsume(&mock, key));
 }
 
-TEST_F(RedisConsumerTest, TestCannotConsume) {
+TEST_F(ConsumerTest, TestCannotConsume) {
 
     MockICredis mock;
 
     EXPECT_CALL(mock, exists(key.c_str()))
             .WillOnce(Return(-1));
 
-    RedisConsumer r;
+    Consumer r;
     ASSERT_FALSE(r.CanConsume(&mock, key));
 }
 
@@ -76,7 +76,7 @@ ACTION_P(SetArg1, c){
     *arg1 = c;
 };
 
-TEST_F(RedisConsumerTest, TestGetRandoms) {
+TEST_F(ConsumerTest, TestGetData) {
 
     MockICredis mock;
     size_t howMany = 10;
@@ -93,8 +93,8 @@ TEST_F(RedisConsumerTest, TestGetRandoms) {
     EXPECT_CALL(mock, lpop(key.c_str(), NotNull()))
             .Times(howMany);
 
-    RedisConsumer r;
-    std::vector<double> l(r.GetRandoms(&mock, key, howMany));
+    Consumer r;
+    std::vector<double> l(r.GetData(&mock, key, howMany));
 
     ASSERT_EQ(howMany, l.size());
     for (size_t i(0); i!=l.size(); ++i)
@@ -104,10 +104,10 @@ TEST_F(RedisConsumerTest, TestGetRandoms) {
 
 }
 
-TEST_F(RedisConsumerTest, TestGetRandoms_LotsMoreThanDefaultMax) {
+TEST_F(ConsumerTest, TestGetData_LotsMoreThanDefaultMax) {
 
     MockICredis mock;
-    size_t howMany = 200; //needs to be bigger than RedisConsumer.cpp::default_max = 100
+    size_t howMany = 200; //needs to be bigger than Consumer.cpp::default_max = 100
 
     EXPECT_CALL(mock, exists(key.c_str()))
             .WillOnce(Return(0));
@@ -121,8 +121,8 @@ TEST_F(RedisConsumerTest, TestGetRandoms_LotsMoreThanDefaultMax) {
     EXPECT_CALL(mock, lpop(key.c_str(), NotNull()))
             .Times(howMany);
 
-    RedisConsumer r;
-    std::vector<double> l(r.GetRandoms(&mock, key, howMany));
+    Consumer r;
+    std::vector<double> l(r.GetData(&mock, key, howMany));
 
     ASSERT_EQ(howMany, l.size());
     for (size_t i(0); i!=l.size(); ++i)
@@ -132,7 +132,7 @@ TEST_F(RedisConsumerTest, TestGetRandoms_LotsMoreThanDefaultMax) {
 
 }
 
-TEST_F(RedisConsumerTest, TestGetRandoms_CannotConsume) {
+TEST_F(ConsumerTest, TestGetData_CannotConsume) {
 
     MockICredis mock;
 
@@ -142,13 +142,13 @@ TEST_F(RedisConsumerTest, TestGetRandoms_CannotConsume) {
     EXPECT_CALL(mock, lpop(_, _))
             .Times(0);
 
-    RedisConsumer r;
-    std::vector<double> l(r.GetRandoms(&mock, key, 10));
+    Consumer r;
+    std::vector<double> l(r.GetData(&mock, key, 10));
 
     ASSERT_TRUE(l.empty());
 }
 
-TEST_F(RedisConsumerTest, TestGetRandoms_CannotPop) {
+TEST_F(ConsumerTest, TestGetData_CannotPop) {
 
     MockICredis mock;
 
@@ -164,8 +164,8 @@ TEST_F(RedisConsumerTest, TestGetRandoms_CannotPop) {
     EXPECT_CALL(mock, lpop(key.c_str(), NotNull()))
             .Times(AtLeast(1));
 
-    RedisConsumer r;
-    std::vector<double> l(r.GetRandoms(&mock, key, 10));
+    Consumer r;
+    std::vector<double> l(r.GetData(&mock, key, 10));
 
     ASSERT_TRUE(l.empty());
 }
